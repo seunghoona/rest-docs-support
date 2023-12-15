@@ -9,10 +9,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.PayloadDocumentation;
-import org.springframework.restdocs.restassured.RestDocumentationFilter;
+import org.springframework.restdocs.restassured3.RestDocumentationFilter;
 
 
 class BaseRestDocsAdapter {
@@ -65,38 +66,47 @@ class BaseRestDocsAdapter {
 
 		@Override
 		public ResponseDocument request(Field... fields) {
-			var fieldMap = Arrays.stream(fields)
-				.flatMap(field -> field instanceof FieldList fieldList ? add(fieldList) : Arrays.stream(new Field[]{field}))
-				.toList();
+			List<Field> fieldMap = Arrays.stream(fields)
+				.flatMap(getFieldStreamFunction())
+				.collect(Collectors.toList());
 
 			this.requestFields.addAll(fieldMap);
 			return this;
 		}
 
+		private Function<Field, Stream<? extends Field>> getFieldStreamFunction() {
+			return field -> {
+				if (field instanceof FieldList) {
+					return add((FieldList) field);
+				}
+				return Arrays.stream(new Field[]{field});
+			};
+		}
+
 		private Stream<Field> add(FieldList fieldList) {
-			var fields = fieldList.getFields();
+			List<Field> fields = fieldList.getFields();
 			fields.add(0,fieldList);
 			return fields.stream();
 		}
 
 		@Override
 		public DocumentEnd response(Field... fields) {
-			var fieldMap = Arrays.stream(fields)
-				.flatMap(field -> field instanceof FieldList fieldList ? add(fieldList) : Arrays.stream(new Field[]{field}))
-				.toList();
+			List<Field> fieldMap = Arrays.stream(fields)
+				.flatMap(getFieldStreamFunction())
+				.collect(Collectors.toList());
 			this.responsesFields.addAll(fieldMap);
 			return this;
 		}
 
 		@Override
 		public RestDocumentationFilter end() {
-			var request = this.requestFields.stream()
+			List<FieldDescriptor> request = this.requestFields.stream()
 				.map(getFieldFieldDescriptorFunction())
-				.toList();
+				.collect(Collectors.toList());
 
-			var response = this.responsesFields.stream()
+			List<FieldDescriptor> response = this.responsesFields.stream()
 				.map(getFieldFieldDescriptorFunction())
-				.toList();
+				.collect(Collectors.toList());
 
 			return RestAssuredRestDocumentationWrapper.document(
 				this.document,
@@ -107,7 +117,7 @@ class BaseRestDocsAdapter {
 
 		private Function<Field, FieldDescriptor> getFieldFieldDescriptorFunction() {
 			return field -> {
-				var type = fieldWithPath(field.getFieldName()).type(field.getJsonFieldType());
+				FieldDescriptor type = fieldWithPath(field.getFieldName()).type(field.getJsonFieldType());
 				return field.isOptional() ? type.optional() : type;
 			};
 		}

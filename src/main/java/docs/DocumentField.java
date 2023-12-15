@@ -136,7 +136,11 @@ public class DocumentField {
 
 		@Override
 		public FieldList with(Field field) {
-			var prefixList = String.format("%s[].%s", this.fieldName, field.getFieldName());
+			String prefixList = String.format(
+				"%s[].%s",
+				this.fieldName,
+				field.getFieldName()
+			);
 			fields.add(new FieldBuilder(prefixList, field.getJsonFieldType(), field.getDesc(), field.isOptional()));
 			return this;
 		}
