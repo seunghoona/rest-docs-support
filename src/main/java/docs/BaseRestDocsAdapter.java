@@ -117,7 +117,9 @@ class BaseRestDocsAdapter {
 
 		private Function<Field, FieldDescriptor> getFieldFieldDescriptorFunction() {
 			return field -> {
-				FieldDescriptor type = fieldWithPath(field.getFieldName()).type(field.getJsonFieldType());
+				FieldDescriptor type = fieldWithPath(field.getFieldName())
+					.type(field.getJsonFieldType())
+					.description(field.getDesc());
 				return field.isOptional() ? type.optional() : type;
 			};
 		}
