@@ -4,7 +4,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 
 import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import docs.DocumentField.Field;
-import docs.DocumentField.FieldList;
+import docs.DocumentField.FieldCollection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,22 +16,15 @@ import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 
 
-class BaseRestDocsAdapter {
+class BaseRestDocs {
 
 	public static RequestDocument document(String document) {
-		return new CustomRestDocsBuilder(document);
-	}
-
-	public interface DefaultDocument {
-
-		RequestDocument document(String document);
-
+		return new BaseRestDocsBuilder(document);
 	}
 
 	public interface RequestDocument {
 
 		ResponseDocument request(Field... fields);
-
 	}
 
 
@@ -42,26 +35,17 @@ class BaseRestDocsAdapter {
 
 
 	public interface DocumentEnd {
-
 		RestDocumentationFilter end();
-
-		String toString();
 	}
 
-	static class CustomRestDocsBuilder implements DefaultDocument, RequestDocument, ResponseDocument, DocumentEnd {
+	static class BaseRestDocsBuilder implements RequestDocument, ResponseDocument, DocumentEnd {
 
 		private String document;
 		private final List<Field> requestFields = new ArrayList<>();
 		private final List<Field> responsesFields = new ArrayList<>();
 
-		public CustomRestDocsBuilder(String document) {
+		public BaseRestDocsBuilder(String document) {
 			this.document = document;
-		}
-
-		@Override
-		public RequestDocument document(String document) {
-			this.document = document;
-			return this;
 		}
 
 		@Override
@@ -76,14 +60,14 @@ class BaseRestDocsAdapter {
 
 		private Function<Field, Stream<? extends Field>> getFieldStreamFunction() {
 			return field -> {
-				if (field instanceof FieldList) {
-					return add((FieldList) field);
+				if (field instanceof FieldCollection) {
+					return add((FieldCollection) field);
 				}
 				return Arrays.stream(new Field[]{field});
 			};
 		}
 
-		private Stream<Field> add(FieldList fieldList) {
+		private Stream<Field> add(FieldCollection fieldList) {
 			List<Field> fields = fieldList.getFields();
 			fields.add(0,fieldList);
 			return fields.stream();
@@ -100,6 +84,7 @@ class BaseRestDocsAdapter {
 
 		@Override
 		public RestDocumentationFilter end() {
+
 			List<FieldDescriptor> request = this.requestFields.stream()
 				.map(getFieldFieldDescriptorFunction())
 				.collect(Collectors.toList());
@@ -113,6 +98,7 @@ class BaseRestDocsAdapter {
 				PayloadDocumentation.requestFields(request),
 				PayloadDocumentation.responseFields(response)
 			);
+
 		}
 
 		private Function<Field, FieldDescriptor> getFieldFieldDescriptorFunction() {
@@ -122,11 +108,6 @@ class BaseRestDocsAdapter {
 					.description(field.getDesc());
 				return field.isOptional() ? type.optional() : type;
 			};
-		}
-
-		@Override
-		public String toString() {
-			return "CustomRestDocsBuilder{" + "document='" + document + '\'' + ", requestFields=" + requestFields + ", responsesFields=" + responsesFields + '}';
 		}
 	}
 

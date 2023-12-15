@@ -3,7 +3,7 @@ package docs;
 
 import docs.DocumentField.Field;
 import docs.DocumentField.FieldBuilder;
-import docs.DocumentField.FieldList;
+import docs.DocumentField.FieldCollection;
 import docs.DocumentField.FieldListBuilder;
 import org.springframework.restdocs.payload.JsonFieldType;
 
@@ -33,27 +33,27 @@ public interface BaseDocumentFields {
 		return new FieldBuilder(filedName, JsonFieldType.NUMBER, desc);
 	}
 
-	static Field object(String filedName) {
-		return new FieldBuilder(filedName, JsonFieldType.OBJECT);
+	static FieldCollection object(String filedName) {
+		return new FieldListBuilder(filedName, JsonFieldType.OBJECT);
 	}
 
-	static Field object(String filedName, String desc, boolean isOptional) {
-		return new FieldBuilder(filedName, JsonFieldType.OBJECT, desc, isOptional);
+	static FieldCollection object(String filedName, String desc, boolean isOptional) {
+		return new FieldListBuilder(filedName, JsonFieldType.OBJECT, desc, isOptional);
 	}
 
-	static Field object(String filedName, String desc) {
-		return new FieldBuilder(filedName, JsonFieldType.OBJECT, desc);
+	static FieldCollection object(String filedName, String desc) {
+		return new FieldListBuilder(filedName, JsonFieldType.OBJECT, desc);
 	}
 
-	static FieldList list(String filedName) {
+	static FieldCollection list(String filedName) {
 		return new FieldListBuilder(filedName, JsonFieldType.ARRAY);
 	}
 
-	static FieldList list(String filedName, String desc, boolean isOptional) {
+	static FieldCollection list(String filedName, String desc, boolean isOptional) {
 		return new FieldListBuilder(filedName, JsonFieldType.ARRAY, desc, isOptional);
 	}
 
-	static FieldList list(String filedName, String desc) {
+	static FieldCollection list(String filedName, String desc) {
 		return new FieldListBuilder(filedName, JsonFieldType.ARRAY, desc);
 	}
 

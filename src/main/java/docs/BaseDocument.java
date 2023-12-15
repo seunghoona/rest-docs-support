@@ -1,12 +1,12 @@
 package docs;
 
 
-import docs.BaseRestDocsAdapter.RequestDocument;
+import docs.BaseRestDocs.RequestDocument;
 
 public class BaseDocument {
 
 	public static RequestDocument document(String document) {
-		return BaseRestDocsAdapter.document(document);
+		return BaseRestDocs.document(document);
 	}
 
 }

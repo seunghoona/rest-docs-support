@@ -19,10 +19,13 @@ public class DocumentField {
 
 		boolean isOptional();
 
+		FieldCollection with(Field field);
+
 	}
 
-	public interface FieldList extends Field {
-		FieldList with(Field string);
+	public interface FieldCollection extends Field {
+
+		FieldCollection with(Field field);
 
 		List<Field> getFields();
 
@@ -30,8 +33,8 @@ public class DocumentField {
 
 	static class FieldBuilder implements Field {
 
-		private String fieldName;
-		private JsonFieldType jsonFieldType;
+		private final String fieldName;
+		private final JsonFieldType jsonFieldType;
 		private String desc;
 		private boolean optional = false;
 
@@ -88,18 +91,25 @@ public class DocumentField {
 		}
 
 		@Override
+		public FieldCollection with(Field field) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
 		public String toString() {
 			return "FieldBuilder{" + "fieldName='" + fieldName + '\'' + ", jsonFieldType=" + jsonFieldType + ", desc='" + desc + '\'' + ", optional=" + optional + '}';
 		}
 	}
 
-	static class FieldListBuilder implements FieldList {
+	static class FieldListBuilder implements FieldCollection {
 
-		private String fieldName;
-		private JsonFieldType jsonFieldType;
+		private static final String OBJECT_FORMAT = "%s.%s";
+		private static final String ARRAY_FORMAT = "%s[].%s";
+		private final String fieldName;
+		private final JsonFieldType jsonFieldType;
 		private String desc;
 		private boolean optional = false;
-		private List<Field> fields = new ArrayList<>();
+		private final List<Field> fields = new ArrayList<>();
 
 
 		public FieldListBuilder(String fieldName, JsonFieldType jsonFieldType) {
@@ -135,14 +145,31 @@ public class DocumentField {
 		}
 
 		@Override
-		public FieldList with(Field field) {
-			String prefixList = String.format(
-				"%s[].%s",
+		public FieldCollection with(Field field) {
+
+			if (JsonFieldType.OBJECT.equals(this.jsonFieldType)) {
+				fields.add(new FieldBuilder(getString(field,
+					OBJECT_FORMAT
+				), field.getJsonFieldType(), field.getDesc(), field.isOptional()));
+				return this;
+			}
+
+			if (JsonFieldType.ARRAY.equals(this.jsonFieldType)) {
+				fields.add(new FieldBuilder(getString(field,
+					ARRAY_FORMAT
+				), field.getJsonFieldType(), field.getDesc(), field.isOptional()));
+				return this;
+			}
+
+			throw new UnsupportedOperationException();
+		}
+
+		private String getString(Field field, String format) {
+			return String.format(
+				format,
 				this.fieldName,
 				field.getFieldName()
 			);
-			fields.add(new FieldBuilder(prefixList, field.getJsonFieldType(), field.getDesc(), field.isOptional()));
-			return this;
 		}
 
 		@Override
