@@ -58,7 +58,7 @@ class BaseRestDocs {
 
 		private String document;
 		private final List<Field> requestFields = new ArrayList<>();
-		private final List<Field> responsesFields = new ArrayList<>();
+		private final List<Field> responsesFields = BaseDocumentConfig.RESPONSE_DEFAULT_HEADER;
 		private final List<Field> queryParam = new ArrayList<>();
 		private final List<Field> pathParam = new ArrayList<>();
 
@@ -99,9 +99,15 @@ class BaseRestDocs {
 			return this;
 		}
 
+
+
 		@Override
-		public RequestResponseDocument multipart(Field... desc) {
-			throw new UnsupportedOperationException();
+		public DocumentEnd response(Field... fields) {
+			List<Field> fieldMap = Arrays.stream(fields)
+				.flatMap(getFieldStreamFunction())
+				.collect(Collectors.toList());
+			this.responsesFields.addAll(fieldMap);
+			return this;
 		}
 
 		private Function<Field, Stream<? extends Field>> getFieldStreamFunction() {
@@ -120,23 +126,20 @@ class BaseRestDocs {
 		}
 
 		@Override
-		public DocumentEnd response(Field... fields) {
-			List<Field> fieldMap = Arrays.stream(fields)
-				.flatMap(getFieldStreamFunction())
-				.collect(Collectors.toList());
-			this.responsesFields.addAll(fieldMap);
-			return this;
+		public RequestResponseDocument multipart(Field... desc) {
+			throw new UnsupportedOperationException();
 		}
+
 
 		@Override
 		public RestDocumentationFilter end() {
 
 			List<FieldDescriptor> request = this.requestFields.stream()
-				.map(getfieldWithPathFunc())
+				.map(getFieldWithPathFunc())
 				.collect(Collectors.toList());
 
 			List<FieldDescriptor> response = this.responsesFields.stream()
-				.map(getfieldWithPathFunc())
+				.map(getFieldWithPathFunc())
 				.collect(Collectors.toList());
 
 			List<ParameterDescriptor> pathParam = this.pathParam.stream()
@@ -174,12 +177,7 @@ class BaseRestDocs {
 			};
 		}
 
-
-		public void sample(Snippet ... args) {
-
-		}
-
-		private Function<Field, FieldDescriptor> getfieldWithPathFunc() {
+		private Function<Field, FieldDescriptor> getFieldWithPathFunc() {
 			return field -> {
 				FieldDescriptor type = fieldWithPath(field.getFieldName())
 					.type(field.getJsonFieldType())

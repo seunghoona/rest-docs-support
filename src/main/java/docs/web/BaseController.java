@@ -1,5 +1,6 @@
 package docs.web;
 
+
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("sample")
 public class BaseController {
-
 
 	@GetMapping
 	public ResponseEntity<BaseResponse> get(BaseRequest baseRequest) {
@@ -57,8 +57,31 @@ public class BaseController {
 		return ResponseEntity.noContent().build();
 	}
 
+	static class Header {
 
-	class BaseResponse {
+		private String code = "000";
+		private String message = "정상처리";
+
+		public String getCode() {
+			return code;
+		}
+
+		public void setCode(String code) {
+			this.code = code;
+		}
+
+		public String getMessage() {
+			return message;
+		}
+
+		public void setMessage(String message) {
+			this.message = message;
+		}
+	}
+
+	static class BaseResponse {
+
+		private Header headers = new Header();
 		private String name;
 
 		public String getName() {
@@ -68,9 +91,17 @@ public class BaseController {
 		public void setName(String name) {
 			this.name = name;
 		}
+
+		public Header getHeaders() {
+			return headers;
+		}
+
+		public void setHeaders(Header headers) {
+			this.headers = headers;
+		}
 	}
 
-	class BaseRequest {
+	static class BaseRequest {
 
 		private String name;
 		private String sortType;

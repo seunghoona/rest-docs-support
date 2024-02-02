@@ -1,6 +1,7 @@
 package docs;
 
 
+import static docs.BaseDocumentFields.object;
 import static docs.BaseDocumentFields.string;
 
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,7 @@ class BaseControllerTest extends BaseTest {
 	@Test
 	void 요청이_없는_응답조회() {
 		var 문서 = BaseDocument.document("요청값이 없는 조회")
-			.response(string("name").desc("응답 Name"))
+			.response(string("name").desc("이름"))
 			.end();
 
 		customGivenWithDocs(문서).when()
