@@ -58,7 +58,8 @@ class BaseRestDocs {
 
 		private String document;
 		private final List<Field> requestFields = new ArrayList<>();
-		private final List<Field> responsesFields = BaseDocumentConfig.RESPONSE_DEFAULT_HEADER;
+		private final List<Field> responsesHeader = BaseDocumentConfig.RESPONSE_DEFAULT_HEADER;
+		private final List<Field> responsesFields = new ArrayList<>();
 		private final List<Field> queryParam = new ArrayList<>();
 		private final List<Field> pathParam = new ArrayList<>();
 
@@ -104,6 +105,8 @@ class BaseRestDocs {
 			List<Field> fieldMap = Arrays.stream(fields)
 				.flatMap(getFieldStreamFunction())
 				.collect(Collectors.toList());
+
+			this.responsesFields.addAll(this.responsesHeader);
 			this.responsesFields.addAll(fieldMap);
 			return this;
 		}
@@ -161,6 +164,12 @@ class BaseRestDocs {
 				.filter(s -> s.getKey() != 0)
 				.map(Entry::getValue)
 				.collect(Collectors.toList());
+
+
+			this.requestFields.clear();
+			this.responsesFields.clear();
+			this.queryParam.clear();
+			this.pathParam.clear();
 
 			return RestAssuredRestDocumentationWrapper.document(
 				this.document,

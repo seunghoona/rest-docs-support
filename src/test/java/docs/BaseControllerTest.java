@@ -16,7 +16,8 @@ class BaseControllerTest extends BaseTest {
 		var 문서 = BaseDocument.document("요청값이 없는 조회")
 			.response(
 				string("price").desc("가격"),
-				list("samples").desc("샘플"))
+				list("samples").desc("샘플")
+					.with("orderName", "주문이름"))
 			.end();
 
 		customGivenWithDocs(문서).when()
@@ -32,7 +33,8 @@ class BaseControllerTest extends BaseTest {
 			.pathParam(string("id").desc("아이디"))
 			.response(
 				string("price").desc("가격"),
-				list("samples").desc("샘플"))
+				list("samples").desc("샘플")
+					.with("orderName", "주문이름"))
 			.end();
 
 		customGivenWithDocs(문서).get(
@@ -50,7 +52,8 @@ class BaseControllerTest extends BaseTest {
 			)
 			.response(
 				string("price").desc("가격"),
-				list("samples").desc("샘플"))
+				list("samples").desc("샘플")
+					.with("orderName", "주문이름"))
 			.end();
 
 		customGivenWithDocs(문서).queryParam(
@@ -71,7 +74,8 @@ class BaseControllerTest extends BaseTest {
 			.requestBody(string("name").desc("요청 이름"))
 			.response(
 				string("price").desc("가격"),
-				list("samples").desc("샘플"))
+				list("samples").desc("샘플")
+					.with("orderName", "주문이름"))
 			.end();
 
 		customGivenWithDocs(문서).body("{\"name\" : \"하이\"}")

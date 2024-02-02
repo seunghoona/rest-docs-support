@@ -20,17 +20,13 @@ public class BaseController {
 
 	@GetMapping
 	public ResponseEntity<BaseResponse> get(BaseRequest baseRequest) {
-		BaseResponse baseResponse = new BaseResponse();
-		SampleProduct sampleProduct = new SampleProduct();
-		baseResponse.setData(sampleProduct);
+		BaseResponse baseResponse = getBaseResponse();
 		return ResponseEntity.ok(baseResponse);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<BaseResponse> get(@PathVariable String id) {
-		BaseResponse baseResponse = new BaseResponse();
-		SampleProduct sampleProduct = new SampleProduct();
-		baseResponse.setData(sampleProduct);
+		BaseResponse baseResponse = getBaseResponse();
 		return ResponseEntity.ok(baseResponse);
 	}
 
@@ -44,18 +40,21 @@ public class BaseController {
 
 	@PostMapping
 	public ResponseEntity<BaseResponse> post(@RequestBody BaseRequest baseRequest) {
-		BaseResponse baseResponse = new BaseResponse();
-		SampleProduct sampleProduct = new SampleProduct();
-		baseResponse.setData(sampleProduct);
+		BaseResponse baseResponse = getBaseResponse();
 		return ResponseEntity.created(URI.create("sample")).body(baseResponse);
 	}
 
-	@PatchMapping("/{id}")
-	public ResponseEntity<BaseResponse> patch(@PathVariable String id, @RequestBody BaseRequest baseRequest) {
+	private BaseResponse getBaseResponse() {
 		BaseResponse baseResponse = new BaseResponse();
 		SampleProduct sampleProduct = new SampleProduct();
 		sampleProduct.setSamples(List.of(new SampleOrder()));
 		baseResponse.setData(sampleProduct);
+		return baseResponse;
+	}
+
+	@PatchMapping("/{id}")
+	public ResponseEntity<BaseResponse> patch(@PathVariable String id, @RequestBody BaseRequest baseRequest) {
+		BaseResponse baseResponse = getBaseResponse();
 		return ResponseEntity.ok(baseResponse);
 	}
 
