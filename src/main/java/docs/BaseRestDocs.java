@@ -109,6 +109,11 @@ class BaseRestDocs {
 				return field.isOptional() ? type.optional() : type;
 			};
 		}
+
+		@Override
+		public String toString() {
+			return "BaseRestDocsBuilder{" + "document='" + document + '\'' + ", requestFields=" + requestFields + ", responsesFields=" + responsesFields + '}';
+		}
 	}
 
 }

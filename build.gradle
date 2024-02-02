@@ -24,6 +24,7 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'io.rest-assured:rest-assured:5.3.1'
     implementation 'org.springframework.restdocs:spring-restdocs-restassured'
     implementation 'com.epages:restdocs-api-spec-restassured:0.18.2'
