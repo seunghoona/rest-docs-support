@@ -99,8 +99,6 @@ class BaseRestDocs {
 			return this;
 		}
 
-
-
 		@Override
 		public DocumentEnd response(Field... fields) {
 			List<Field> fieldMap = Arrays.stream(fields)
@@ -139,7 +137,7 @@ class BaseRestDocs {
 				.collect(Collectors.toList());
 
 			List<FieldDescriptor> response = this.responsesFields.stream()
-				.map(getFieldWithPathFunc())
+				.map(getFieldWithPathResponseFunc())
 				.collect(Collectors.toList());
 
 			List<ParameterDescriptor> pathParam = this.pathParam.stream()
@@ -180,6 +178,24 @@ class BaseRestDocs {
 		private Function<Field, FieldDescriptor> getFieldWithPathFunc() {
 			return field -> {
 				FieldDescriptor type = fieldWithPath(field.getFieldName())
+					.type(field.getJsonFieldType())
+					.description(field.getDesc());
+				return field.isOptional() ? type.optional() : type;
+			};
+		}
+
+		private Function<Field, FieldDescriptor> getFieldWithPathResponseFunc() {
+			return field -> {
+				// TODO : 반드시 분리 생각 하기
+
+				if (field.getFieldName().startsWith("headers")) {
+					FieldDescriptor type = fieldWithPath(field.getFieldName())
+					.type(field.getJsonFieldType())
+					.description(field.getDesc());
+					return field.isOptional() ? type.optional() : type;
+				}
+
+				FieldDescriptor type = fieldWithPath("data." + field.getFieldName())
 					.type(field.getJsonFieldType())
 					.description(field.getDesc());
 				return field.isOptional() ? type.optional() : type;

@@ -1,5 +1,8 @@
 package docs;
 
+import static docs.BaseDocumentFields.*;
+
+import docs.DocumentField.FieldCollection;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -21,6 +24,7 @@ public class DocumentField {
 
 		FieldCollection with(Field field);
 
+		FieldCollection with(String fieldName, String description);
 	}
 
 	public interface FieldCollection extends Field {
@@ -96,6 +100,11 @@ public class DocumentField {
 		}
 
 		@Override
+		public FieldCollection with(String fieldName, String description) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
 		public String toString() {
 			return "FieldBuilder{" + "fieldName='" + fieldName + '\'' + ", jsonFieldType=" + jsonFieldType + ", desc='" + desc + '\'' + ", optional=" + optional + '}';
 		}
@@ -162,6 +171,12 @@ public class DocumentField {
 			}
 
 			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public FieldCollection with(String fieldName, String description) {
+			return with(string(fieldName)
+				.desc(description));
 		}
 
 		private String getString(Field field, String format) {
