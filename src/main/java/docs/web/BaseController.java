@@ -1,4 +1,4 @@
-package docs;
+package docs.web;
 
 import java.net.URI;
 import java.util.List;
@@ -58,7 +58,7 @@ public class BaseController {
 	}
 
 
-	static class BaseResponse {
+	class BaseResponse {
 		private String name;
 
 		public String getName() {
@@ -70,7 +70,7 @@ public class BaseController {
 		}
 	}
 
-	static class BaseRequest {
+	class BaseRequest {
 
 		private String name;
 		private String sortType;
