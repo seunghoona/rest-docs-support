@@ -1,43 +1,32 @@
 package docs;
 
 
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static docs.BaseDocumentFields.string;
 
-import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import org.junit.jupiter.api.Test;
-import org.springframework.restdocs.payload.JsonFieldType;
 
 
-class BaseControllerTest extends BaseTest{
+class BaseControllerTest extends BaseTest {
 
 	@Test
-	void 요청값이_없는_조회() {
-		var 문서 = RestAssuredRestDocumentationWrapper.document(
-			"요청값이_없는_조회",
-			responseFields(fieldWithPath("name").type(JsonFieldType.STRING)
-				.description("응답 name"))
-		);
+	void 요청이_없는_응답조회() {
+		var 문서 = BaseDocument.document("요청값이 없는 조회")
+			.response(string("name").desc("응답 Name"))
+			.end();
 
-		customGivenWithDocs(문서)
-			.when()
+		customGivenWithDocs(문서).when()
 			.get("sample")
 			.then()
 			.statusCode(200);
 	}
 
 	@Test
-	void pathParamter요청_있는_다건_조회() {
-		var 문서 = RestAssuredRestDocumentationWrapper.document(
-			"요청값이_있는_다건_조회",
-			pathParameters(parameterWithName("id").description("아이디")),
-			responseFields(fieldWithPath("name").type(JsonFieldType.STRING)
-				.description("응답 name"))
-		);
+	void pathParameter_조회() {
+
+		var 문서 = BaseDocument.document("pathParameter_조회")
+			.pathParam(string("id").desc("아이디"))
+			.response(string("name").desc("응답 Name"))
+			.end();
 
 		customGivenWithDocs(문서).get(
 			"sample/{id}",
@@ -46,50 +35,53 @@ class BaseControllerTest extends BaseTest{
 	}
 
 	@Test
-	void queryParam_요청() {
-		var 문서 = RestAssuredRestDocumentationWrapper.document(
-			"queryParam_요청",
-			queryParameters(parameterWithName("sortType").description("오호"),
-				parameterWithName("name").description("오호")),
-			responseFields(fieldWithPath("name").type(JsonFieldType.STRING)
-				.description("응답 name"))
-		);
+	void queryParam_조회() {
+		var 문서 = BaseDocument.document("QueryParam 조회")
+			.queryParam(
+				string("name").desc("요청 이름"),
+				string("sortType").desc("정렬")
+			)
+			.response(string("name").desc("응답 Name"))
+			.end();
 
-		customGivenWithDocs(문서)
-			.queryParam("name", "이름")
-			.queryParam("sortType", "DESC")
+		customGivenWithDocs(문서).queryParam(
+				"name",
+				"이름"
+			)
+			.queryParam(
+				"sortType",
+				"DESC"
+			)
 			.get("/sample");
 	}
 
 	@Test
 	void 데이터_저장() {
-		var 문서 = RestAssuredRestDocumentationWrapper.document(
-			"데이터_저장",
-			requestFields(fieldWithPath("name").type(JsonFieldType.STRING).description("요청 이름")),
-			responseFields(fieldWithPath("name").type(JsonFieldType.STRING)
-				.description("응답 name"))
-		);
 
-		customGivenWithDocs(문서)
-			.body("{\"name\" : \"하이\"}")
+		var 문서 = BaseDocument.document("데이터 저장")
+			.requestBody(string("name").desc("요청 이름"))
+			.response(string("name").desc("응답 Name"))
+			.end();
+
+		customGivenWithDocs(문서).body("{\"name\" : \"하이\"}")
 			.post("/sample");
 	}
 
 	@Test
 	void 데이터_수정() {
-		var 문서 = RestAssuredRestDocumentationWrapper.document(
-			"데이터_수정",
-			pathParameters(parameterWithName("id").description("아이디")),
-			requestFields(fieldWithPath("name").type(JsonFieldType.STRING).description("요청 이름")),
-			responseFields(fieldWithPath("name").type(JsonFieldType.STRING)
-				.description("응답 name"))
-		);
 
+		var 문서 = BaseDocument.document("데이터 수정")
+			.pathParam(string("id").desc("아이디"))
+			.requestBody(string("name").desc("요청 이름"))
+			.response(string("name").desc("응답 Name"))
+			.end();
 
-		customGivenWithDocs(문서)
-			.body("{\"name\" : \"하이\"}")
-			.patch("/sample/{id}", 1L);
+		customGivenWithDocs(문서).body("{\"name\" : \"하이\"}")
+			.patch(
+				"/sample/{id}",
+				1L
+			);
 	}
-	
-	
+
+
 }

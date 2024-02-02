@@ -1,11 +1,11 @@
 package docs;
 
 
-import docs.BaseRestDocs.RequestDocument;
+import docs.BaseRestDocs.RequestResponseDocument;
 
 public class BaseDocument {
 
-	public static RequestDocument document(String document) {
+	public static RequestResponseDocument document(String document) {
 		return BaseRestDocs.document(document);
 	}
 
