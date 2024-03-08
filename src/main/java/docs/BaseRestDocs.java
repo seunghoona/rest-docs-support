@@ -6,6 +6,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import docs.DocumentField.Field;
 import docs.DocumentField.FieldCollection;
+import docs.DocumentField.FieldListBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.restdocs.request.RequestDocumentation;
@@ -45,9 +47,13 @@ class BaseRestDocs {
 	public interface ResponseDocument {
 
 		DocumentEnd response(Field... fields);
+
+		DocumentEnd response();
 	}
 
-	public interface RequestResponseDocument extends RequestDocument, ResponseDocument {}
+	public interface RequestResponseDocument extends RequestDocument, ResponseDocument {
+
+	}
 
 
 	public interface DocumentEnd {
@@ -111,6 +117,13 @@ class BaseRestDocs {
 			return this;
 		}
 
+		@Override
+		public DocumentEnd response() {
+			this.responsesFields.addAll(this.responsesHeader);
+			this.responsesFields.add(new FieldListBuilder("data", JsonFieldType.OBJECT));
+			return this;
+		}
+
 		private Function<Field, Stream<? extends Field>> getFieldStreamFunction() {
 			return field -> {
 				if (field instanceof FieldCollection) {
@@ -142,7 +155,7 @@ class BaseRestDocs {
 				.collect(Collectors.toList());
 
 			List<FieldDescriptor> response = this.responsesFields.stream()
-				.map(getFieldWithPathResponseFunc())
+				.map(toFileDescriptor())
 				.collect(Collectors.toList());
 
 			List<ParameterDescriptor> pathParam = this.pathParam.stream()
@@ -197,7 +210,7 @@ class BaseRestDocs {
 			};
 		}
 
-		private Function<Field, FieldDescriptor> getFieldWithPathResponseFunc() {
+		private Function<Field, FieldDescriptor> toFileDescriptor() {
 			return field -> {
 				// TODO : 반드시 분리 생각 하기
 
@@ -206,6 +219,11 @@ class BaseRestDocs {
 					.type(field.getJsonFieldType())
 					.description(field.getDesc());
 					return field.isOptional() ? type.optional() : type;
+				}
+				if (field.getFieldName().startsWith("data")) {
+					return fieldWithPath(field.getFieldName())
+						.type(field.getJsonFieldType())
+						.description(field.getDesc());
 				}
 
 				FieldDescriptor type = fieldWithPath("data." + field.getFieldName())
