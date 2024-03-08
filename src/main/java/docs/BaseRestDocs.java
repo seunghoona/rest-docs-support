@@ -120,7 +120,7 @@ class BaseRestDocs {
 		@Override
 		public DocumentEnd response() {
 			this.responsesFields.addAll(this.responsesHeader);
-			this.responsesFields.add(new FieldListBuilder("data", JsonFieldType.OBJECT));
+			this.responsesFields.add(new FieldListBuilder("data", JsonFieldType.OBJECT, "데이터"));
 			return this;
 		}
 

@@ -24,6 +24,15 @@ public class BaseController {
 		return ResponseEntity.ok(baseResponse);
 	}
 
+	@GetMapping("nodata")
+	public ResponseEntity<BaseResponse> get2(BaseRequest baseRequest) {
+		BaseResponse baseResponse = new BaseResponse();
+		baseResponse.setHeaders(new Header());
+		baseResponse.setData(new Object());
+
+		return ResponseEntity.ok(baseResponse);
+	}
+
 	@GetMapping("/{id}")
 	public ResponseEntity<BaseResponse> get(@PathVariable String id) {
 		BaseResponse baseResponse = getBaseResponse();

@@ -27,6 +27,18 @@ class BaseControllerTest extends BaseTest {
 	}
 
 	@Test
+	void 요청이_없고_응답이_없는조회() {
+		var 문서 = BaseDocument.document("요청값이 없는 조회")
+			.response()
+			.end();
+
+		customGivenWithDocs(문서).when()
+			.get("sample/nodata")
+			.then()
+			.statusCode(200);
+	}
+
+	@Test
 	void pathParameter_조회() {
 
 		var 문서 = BaseDocument.document("pathParameter_조회")
