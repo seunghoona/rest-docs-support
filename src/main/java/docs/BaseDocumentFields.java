@@ -1,6 +1,8 @@
 package docs;
 
 
+import static docs.BaseDocumentConfig.defaultEnum;
+
 import docs.DocumentField.Field;
 import docs.DocumentField.FieldBuilder;
 import docs.DocumentField.FieldCollection;
@@ -80,4 +82,9 @@ public interface BaseDocumentFields {
 	static Field empty(String filedName, String desc, boolean isOptional) {
 		return new FieldBuilder(filedName, JsonFieldType.NULL, desc, isOptional);
 	}
+
+	static Field enumType(String filedName, String desc) {
+		return defaultEnum(filedName, desc);
+	}
+
 }

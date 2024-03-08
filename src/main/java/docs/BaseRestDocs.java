@@ -131,7 +131,9 @@ class BaseRestDocs {
 			throw new UnsupportedOperationException();
 		}
 
+		record TypeFiledAndSize (String type, int size) {
 
+		}
 		@Override
 		public RestDocumentationFilter end() {
 
@@ -151,19 +153,21 @@ class BaseRestDocs {
 				.map(getPathQueryFunc())
 				.collect(Collectors.toList());
 
-			Map<Integer, Snippet> snippetMap = new HashMap<>();
+			Map<TypeFiledAndSize, Snippet> snippetMap = new HashMap<>();
 
-			snippetMap.put(request.size(), PayloadDocumentation.requestFields(request));
-			snippetMap.put(response.size(), PayloadDocumentation.responseFields(response));
-			snippetMap.put(pathParam.size(), RequestDocumentation.pathParameters(pathParam));
-			snippetMap.put(queryParam.size(), RequestDocumentation.queryParameters(queryParam));
+			snippetMap.put(new TypeFiledAndSize("request", request.size()), PayloadDocumentation.requestFields(request));
+			snippetMap.put(new TypeFiledAndSize("response", response.size()), PayloadDocumentation.responseFields(response));
+			snippetMap.put(new TypeFiledAndSize("pathParam", pathParam.size()), RequestDocumentation.pathParameters(pathParam));
+			snippetMap.put(new TypeFiledAndSize("queryParam", queryParam.size()), RequestDocumentation.queryParameters(queryParam));
 
 			List<Snippet> snippets = snippetMap
 				.entrySet()
 				.stream()
-				.filter(s -> s.getKey() != 0)
+				.filter(target -> target
+                           .getKey()
+                           .size() != 0)
 				.map(Entry::getValue)
-				.collect(Collectors.toList());
+				.toList();
 
 
 			this.requestFields.clear();
