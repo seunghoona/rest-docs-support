@@ -1,7 +1,8 @@
-package docs.docs;
+package docs.builder;
 
-import docs.builder.Field;
-import docs.builder.RequestDocumentBuilder.FieldDocumentType;
+import docs.builder.DocumentBuilder.FieldDocumentType;
+import docs.docs.EndDocumentService;
+import docs.docs.EndDocumentServiceImpl;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,13 +12,11 @@ import java.util.stream.Collectors;
 public abstract class AbstractDocument {
 
     protected String document;
+    protected EndDocumentService endDocumentService = new EndDocumentServiceImpl();
     protected final Map<FieldDocumentType, Collection<Field>> fields = new HashMap<>();
 
     public AbstractDocument(String document) {
         this.document = document;
-    }
-
-    public AbstractDocument() {
     }
 
     protected void processes(Field[] enterFields, FieldDocumentType type) {

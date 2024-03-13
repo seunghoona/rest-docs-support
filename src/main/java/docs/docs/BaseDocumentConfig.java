@@ -1,19 +1,11 @@
-package docs;
-
-import static docs.BaseDocumentFields.object;
-import static docs.BaseDocumentFields.string;
-
-import docs.DocumentField.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+package docs.docs;
 
 public class BaseDocumentConfig {
 
-	public static final List<Field> RESPONSE_DEFAULT_HEADER = defaultHeader();
 
 
-	private static List<Field> defaultHeader() {
+
+	/*private static List<Field> defaultHeader() {
 
 		List<Field> list = new ArrayList<>();
 		list.add(object("headers").desc("헤더"));
@@ -35,5 +27,5 @@ public class BaseDocumentConfig {
 			.with(BaseDocumentFields
 					  .string("value")
 					  .desc("value"));
-	}
+	}*/
 }

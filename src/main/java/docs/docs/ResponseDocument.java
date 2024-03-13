@@ -5,8 +5,8 @@ import docs.builder.Field;
 public interface ResponseDocument {
 
 
-    ResponseWithEndDocument response(Field... fields);
+    Document response(Field... fields);
 
-    ResponseWithEndDocument response();
+    Document response();
 
 }

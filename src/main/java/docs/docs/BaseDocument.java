@@ -1,11 +1,11 @@
 package docs.docs;
 
-import docs.builder.RequestDocumentBuilder;
+import docs.builder.DocumentBuilder;
 
 public class BaseDocument {
 
     public static RequestDocument document(String document) {
-        return RequestDocumentBuilder.of(document);
+        return DocumentBuilder.of(document);
     }
 
 }

@@ -1,10 +1,10 @@
 package docs.docs;
 
-import javax.xml.stream.events.EndDocument;
-import org.apache.coyote.Request;
+import org.springframework.restdocs.restassured.RestDocumentationFilter;
 
 public interface Document extends RequestDocument, ResponseDocument {
 
+    Snippets getSnippets();
 
-
+    RestDocumentationFilter end();
 }

@@ -1,27 +1,22 @@
 package docs.builder;
 
-import docs.docs.AbstractDocument;
 import docs.docs.Document;
 import docs.docs.RequestDocument;
-import docs.docs.ResponseDocument;
-import docs.docs.ResponseWithEndDocument;
+import docs.docs.Snippets;
+import org.springframework.restdocs.restassured.RestDocumentationFilter;
 
-public class RequestDocumentBuilder extends AbstractDocument implements Document, ResponseDocument {
-
-    public static RequestDocument of(String document) {
-        return new RequestDocumentBuilder(document);
-    }
-
-    protected RequestDocumentBuilder(String document) {
-        super(document);
-    }
-
-    public RequestDocumentBuilder() {
-        super("");
-    }
+public class DocumentBuilder extends AbstractDocument implements Document {
 
     public enum FieldDocumentType {
         REQUEST, QUERY_PARAM, REQUEST_BODY, PATH_PARAM, MULTIPART, RESPONSE
+    }
+
+    public static RequestDocument of(String document) {
+        return new DocumentBuilder(document);
+    }
+
+    protected DocumentBuilder(String document) {
+        super(document);
     }
 
     @Override
@@ -55,22 +50,33 @@ public class RequestDocumentBuilder extends AbstractDocument implements Document
     }
 
     @Override
-    public ResponseWithEndDocument response(Field... fields) {
+    public Document response(Field... fields) {
         processes(fields, FieldDocumentType.RESPONSE);
-        return new ResponseDocumentBuilder();
+        return this;
     }
 
     @Override
-    public ResponseWithEndDocument response() {
-        return new ResponseDocumentBuilder();
+    public Document response() {
+        processes(new Field[]{}, FieldDocumentType.RESPONSE);
+        return this;
     }
+
+    @Override
+    public Snippets getSnippets() {
+        return endDocumentService.convertToSnippet(super.fields);
+    }
+
+    @Override
+    public RestDocumentationFilter end() {
+        return endDocumentService.convertToRestDocumentationFilter(super.document, super.fields);
+    }
+
 
     /**
      * 필드 문서 타입별 필드를 저장한다.
      * <p>
      * 이미 생성한 필드 타입인 경우 Append 처리, 그 외는 새로 신규로 등록
      */
-
 
     @Override
     public int getSize() {

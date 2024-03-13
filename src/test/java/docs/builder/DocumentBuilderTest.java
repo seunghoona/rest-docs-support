@@ -1,17 +1,18 @@
 package docs.builder;
 
+import docs.BaseDocument;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-class RequestDocumentBuilderTest {
+class DocumentBuilderTest {
 
 
     @Test
     void 중복_체크() {
 
         // given
-        final var requestDocumentBuilder = new RequestDocumentBuilder();
+        final var requestDocumentBuilder = BaseDocument.document("문서");
         final var nameStr1 = new FieldDefaultBuilder("name", JsonFieldType.STRING);
         final var nameStr2 = new FieldDefaultBuilder("name", JsonFieldType.STRING);
 
@@ -26,7 +27,7 @@ class RequestDocumentBuilderTest {
     void 중복_체크_JSON_FIELD_TYPE_이_다른_경우_예외() {
 
         // given
-        final var requestDocumentBuilder = new RequestDocumentBuilder();
+        final var requestDocumentBuilder = BaseDocument.document("문서");
 
         final var nameStr = new FieldDefaultBuilder("name", JsonFieldType.STRING);
         final var object = new FieldDefaultBuilder("name", JsonFieldType.OBJECT);
