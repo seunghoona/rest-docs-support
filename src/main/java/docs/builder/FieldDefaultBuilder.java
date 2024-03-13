@@ -1,26 +1,33 @@
 package docs.builder;
 
 
-import groovy.transform.EqualsAndHashCode;
+import lombok.EqualsAndHashCode;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "fieldName")
 public class FieldDefaultBuilder implements Field, FieldGetter {
 
     private final String fieldName;
+
     private final JsonFieldType jsonFieldType;
+
     private String desc;
+
     private boolean optional;
 
-    protected FieldDefaultBuilder(String fieldName, JsonFieldType jsonFieldType) {
-        this(fieldName, jsonFieldType, "");
+    public FieldDefaultBuilder(String fieldName, JsonFieldType jsonFieldType) {
+        this(fieldName, jsonFieldType, "", false);
     }
 
-    protected FieldDefaultBuilder(String fieldName, JsonFieldType jsonFieldType, String desc) {
+    public FieldDefaultBuilder(String fieldName, JsonFieldType jsonFieldType, String desc) {
+        this(fieldName, jsonFieldType, desc, false);
+    }
+
+    public FieldDefaultBuilder(String fieldName, JsonFieldType jsonFieldType, String desc, boolean optional) {
         this.fieldName = fieldName;
         this.jsonFieldType = jsonFieldType;
         this.desc = desc;
-        this.optional = false;
+        this.optional = optional;
     }
 
     @Override

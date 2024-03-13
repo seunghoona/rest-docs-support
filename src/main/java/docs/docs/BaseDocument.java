@@ -1,8 +1,6 @@
-package docs;
-
+package docs.docs;
 
 import docs.builder.RequestDocumentBuilder;
-import docs.docs.RequestDocument;
 
 public class BaseDocument {
 
