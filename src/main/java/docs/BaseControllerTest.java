@@ -4,6 +4,7 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.Filter;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,10 +39,37 @@ public class BaseControllerTest {
             .contentType(MediaType.APPLICATION_JSON_VALUE);
 
         if (showLog) {
-            customGiven.log()
+            customGiven
+                .log()
                 .all();
         }
         return new ApiTest(customGiven);
+    }
+
+    @Deprecated
+    protected RequestSpecification customGiven() {
+        final RequestSpecification customGiven = RestAssured.given();
+        if (showLog) {
+            return customGiven
+                .log()
+                .all();
+        }
+        return customGiven;
+    }
+
+    @Deprecated
+    protected RequestSpecification customGivenWithDocs(Filter document) {
+        final RequestSpecification customGiven = RestAssured
+            .given(spec)
+            .filter(document)
+            .contentType(MediaType.APPLICATION_JSON_VALUE);
+
+        if (showLog) {
+            return customGiven
+                .log()
+                .all();
+        }
+        return customGiven;
     }
 
 }

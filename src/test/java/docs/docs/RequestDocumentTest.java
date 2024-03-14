@@ -82,13 +82,6 @@ class RequestDocumentTest extends BaseControllerTest {
                                     .with(string("message").desc("comment"))))
             .end();
 
-        given()
-            .document(documentationFilter)
-            .api()
-            .body("""
-                          {"name": "tjfa"}
-                      """)
-            .post("sample/request-body");
 
     }
 
