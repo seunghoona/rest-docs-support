@@ -1,6 +1,7 @@
 package docs.web;
 
 
+import docs.model.JsonDocumentFieldType;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,13 @@ public class BaseController {
 
 		return ResponseEntity.ok(baseResponse);
 	}
+	@GetMapping("/enum-type")
+	public ResponseEntity<BaseResponse> getEnumType(
+		BaseRequest baseRequest) {
+		BaseResponse baseResponse = new BaseResponse();
+
+		return ResponseEntity.ok(baseResponse);
+	}
 
 	private BaseResponse<?> getBaseResponse() {
 		BaseResponse baseResponse = new BaseResponse();
@@ -66,8 +74,14 @@ public class BaseController {
 
 		private String order = "";
 
+		private JsonDocumentFieldType jsonDocumentFieldType;
+
 		public String getOrder() {
 			return order;
+		}
+
+		public JsonDocumentFieldType getJsonDocumentFieldType() {
+			return jsonDocumentFieldType;
 		}
 	}
 

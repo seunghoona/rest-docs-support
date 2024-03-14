@@ -2,6 +2,7 @@ package docs.docs;
 
 import static docs.BaseDocumentFields.list;
 import static docs.BaseDocumentFields.string;
+import static docs.BaseDocumentFields.type;
 import static docs.docs.BaseDocument.document;
 
 import docs.BaseDocument;
@@ -63,4 +64,5 @@ class RequestDocumentTest extends BaseTest {
             .get("sample/no-data");
 
     }
+
 }

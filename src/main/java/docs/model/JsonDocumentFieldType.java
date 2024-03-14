@@ -1,6 +1,8 @@
 package docs.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.restdocs.payload.JsonFieldType;
 
@@ -16,11 +18,14 @@ public enum JsonDocumentFieldType {
     VARIES(JsonFieldType.VARIES),
     ENUM(JsonFieldType.OBJECT);
 
+    private final JsonFieldType jsonFieldType;
+
     JsonDocumentFieldType(JsonFieldType jsonFieldType) {
         this.jsonFieldType = jsonFieldType;
     }
 
-    private final JsonFieldType jsonFieldType;
+    private String key;
+    private String comment;
 
     public static JsonDocumentFieldType valueOf(JsonFieldType type) throws IllegalAccessException {
 
@@ -31,6 +36,15 @@ public enum JsonDocumentFieldType {
                 .equals(type))
             .findFirst()
             .orElseThrow(IllegalAccessException::new);
+    }
+    @JsonValue
+    public String getKey() {
+        return key;
+    }
+
+    @JsonValue
+    public String getComment() {
+        return comment;
     }
 
 }

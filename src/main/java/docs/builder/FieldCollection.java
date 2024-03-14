@@ -44,7 +44,7 @@ public class FieldCollection implements Fields {
                 final var subField = field.toGetFiled();
                 final var subFieldName = subField.getFieldName();
 
-                if (JsonDocumentFieldType.OBJECT.equals(rootFieldType)) {
+                if (List.of(JsonDocumentFieldType.OBJECT, JsonDocumentFieldType.ENUM).contains(rootFieldType)) {
                     return new FieldDefault(String.format("%s.%s", rootName, subFieldName),
                                             subField.getJsonDocumentFieldType(),
                                             subField.getDesc(),
