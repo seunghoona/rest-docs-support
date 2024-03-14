@@ -19,8 +19,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class BaseController {
 
 	@GetMapping
-	public ResponseEntity<BaseResponse> getSample(BaseRequest baseRequest) {
+	public ResponseEntity<BaseResponse> getQueryParam(BaseRequest baseRequest) {
 		BaseResponse baseResponse = getBaseResponse();
+		return ResponseEntity.ok(baseResponse);
+	}
+
+	@GetMapping("/path/{path-name}")
+	public ResponseEntity<BaseResponse> getPathParam(
+		@PathVariable("path-name") String pathName,
+		BaseRequest baseRequest) {
+		BaseResponse baseResponse = new BaseResponse();
+		baseResponse.setData(new SampleOtherOrder());
+		return ResponseEntity.ok(baseResponse);
+	}
+
+	@GetMapping("/no-data")
+	public ResponseEntity<BaseResponse> getNoData(
+		BaseRequest baseRequest) {
+		BaseResponse baseResponse = new BaseResponse();
+
 		return ResponseEntity.ok(baseResponse);
 	}
 
@@ -42,6 +59,15 @@ public class BaseController {
 
 		public void setOrderName(String orderName) {
 			this.orderName = orderName;
+		}
+	}
+
+	static class SampleOtherOrder {
+
+		private String order = "";
+
+		public String getOrder() {
+			return order;
 		}
 	}
 

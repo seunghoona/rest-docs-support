@@ -10,6 +10,7 @@ import docs.builder.Field;
 import docs.builder.FieldDefault;
 import docs.builder.Fields;
 import docs.docs.Snippets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -27,6 +28,7 @@ public class EndDocumentServiceImpl implements EndDocumentService {
     @Override
     public Snippets convertToSnippet(Map<FieldDocumentType, List<Field>> fields) {
 
+        // FieldCollection -> flatMap
         final var collect = fields
             .entrySet()
             .stream()
@@ -46,6 +48,7 @@ public class EndDocumentServiceImpl implements EndDocumentService {
                                })
                                .collect(Collectors.toList())));
 
+        // to Snippet
         final var snippets = collect
             .entrySet()
             .stream()
@@ -54,46 +57,60 @@ public class EndDocumentServiceImpl implements EndDocumentService {
                 .isEmpty())
 
             .flatMap(docFields -> switch (docFields.getKey()) {
-                case QUERY_PARAM -> docFields
-                    .getValue()
-                    .stream()
-                    .map(toParameterDescriptor())
-                    .map(RequestDocumentation::queryParameters);
 
-                case PATH_PARAM -> docFields
-                    .getValue()
-                    .stream()
-                    .map(toParameterDescriptor())
-                    .map(RequestDocumentation::pathParameters);
+                case QUERY_PARAM -> {
+                    final var queryParams = docFields
+                        .getValue()
+                        .stream()
+                        .map(toParameterDescriptor())
+                        .toList();
+                    yield Stream.of(RequestDocumentation.queryParameters(queryParams));
+                }
 
-                case REQUEST -> docFields
-                    .getValue()
-                    .stream()
-                    .map(toFieldDescriptor())
-                    .map(PayloadDocumentation::requestFields);
+                case PATH_PARAM -> {
+                    final var pathParams = docFields
+                        .getValue()
+                        .stream()
+                        .map(toParameterDescriptor())
+                        .toList();
+                    yield Stream.of(RequestDocumentation.pathParameters(pathParams));
+                }
 
-                case RESPONSE -> docFields
-                    .getValue()
-                    .stream()
-                    .map(responseField -> {
+                case REQUEST -> {
+                    final var requestFields = docFields
+                        .getValue()
+                        .stream()
+                        .map(toFieldDescriptor())
+                        .toList();
+                    yield Stream.of(PayloadDocumentation.requestFields(requestFields));
+                }
 
-                        final var filed = responseField.toGetFiled();
+                case RESPONSE -> {
+                    final var responseFields = docFields
+                        .getValue()
+                        .stream()
+                        .map(responseField -> {
 
-                        if (filed
-                                .getFieldName()
-                                .contains("headers") || filed
-                                .getFieldName()
-                                .equals("data")) {
-                            return responseField;
-                        }
+                            final var filed = responseField.toGetFiled();
 
-                        return new FieldDefault(String.format("data.%s", filed.getFieldName()),
-                                                filed.getJsonFieldType(),
-                                                filed.getDesc(),
-                                                filed.isOptional());
-                    })
-                    .map(toFieldDescriptor())
-                    .map(PayloadDocumentation::responseFields);
+                            if (filed
+                                    .getFieldName()
+                                    .contains("headers") || filed
+                                    .getFieldName()
+                                    .equals("data")) {
+                                return responseField;
+                            }
+
+                            return new FieldDefault(String.format("data.%s", filed.getFieldName()),
+                                                    filed.getJsonDocumentFieldType(),
+                                                    filed.getDesc(),
+                                                    filed.isOptional());
+                        })
+                        .map(toFieldDescriptor())
+                        .toList();
+
+                    yield Stream.of(PayloadDocumentation.responseFields(responseFields));
+                }
 
                 default -> throw new UnsupportedOperationException();
             })

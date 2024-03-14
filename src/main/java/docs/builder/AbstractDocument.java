@@ -32,6 +32,7 @@ public abstract class AbstractDocument {
             return;
         }
         createNewFieldDocument(type, collection);
+
     }
 
     // 이미 등록된 FieldDocumentType 확인

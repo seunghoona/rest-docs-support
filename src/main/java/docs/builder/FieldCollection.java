@@ -1,5 +1,6 @@
 package docs.builder;
 
+import docs.model.JsonDocumentFieldType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,21 +39,21 @@ public class FieldCollection implements Fields {
             .map(field -> {
                 final var rootField = this.field.toGetFiled();
                 final var rootName = rootField.getFieldName();
-                final var rootFieldType = rootField.getJsonFieldType();
+                final var rootFieldType = rootField.getJsonDocumentFieldType();
 
                 final var subField = field.toGetFiled();
                 final var subFieldName = subField.getFieldName();
 
-                if (JsonFieldType.OBJECT.equals(rootFieldType)) {
+                if (JsonDocumentFieldType.OBJECT.equals(rootFieldType)) {
                     return new FieldDefault(String.format("%s.%s", rootName, subFieldName),
-                                            subField.getJsonFieldType(),
+                                            subField.getJsonDocumentFieldType(),
                                             subField.getDesc(),
                                             subField.isOptional());
                 }
 
-                if (JsonFieldType.ARRAY.equals(rootFieldType)) {
+                if (JsonDocumentFieldType.ARRAY.equals(rootFieldType)) {
                     return new FieldDefault(String.format("%s[].%s", rootName, subFieldName),
-                                            subField.getJsonFieldType(),
+                                            subField.getJsonDocumentFieldType(),
                                             subField.getDesc(),
                                             subField.isOptional());
                 }

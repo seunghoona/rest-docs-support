@@ -1,6 +1,7 @@
 package docs.builder;
 
 import docs.BaseDocument;
+import docs.model.JsonDocumentFieldType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -13,8 +14,8 @@ class DocumentBuilderTest {
 
         // given
         final var requestDocumentBuilder = BaseDocument.document("문서");
-        final var nameStr1 = new FieldDefault("name", JsonFieldType.STRING);
-        final var nameStr2 = new FieldDefault("name", JsonFieldType.STRING);
+        final var nameStr1 = new FieldDefault("name", JsonDocumentFieldType.STRING);
+        final var nameStr2 = new FieldDefault("name", JsonDocumentFieldType.STRING);
 
         // then
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -29,8 +30,8 @@ class DocumentBuilderTest {
         // given
         final var requestDocumentBuilder = BaseDocument.document("문서");
 
-        final var nameStr = new FieldDefault("name", JsonFieldType.STRING);
-        final var object = new FieldDefault("name", JsonFieldType.OBJECT);
+        final var nameStr = new FieldDefault("name", JsonDocumentFieldType.STRING);
+        final var object = new FieldDefault("name", JsonDocumentFieldType.OBJECT);
 
         // then
         Assertions.assertThrows(IllegalArgumentException.class, () -> {

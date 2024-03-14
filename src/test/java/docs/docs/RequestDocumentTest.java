@@ -3,26 +3,17 @@ package docs.docs;
 import static docs.BaseDocumentFields.list;
 import static docs.BaseDocumentFields.string;
 import static docs.docs.BaseDocument.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 
-import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
+import docs.BaseDocument;
 import docs.BaseTest;
-import docs.builder.FieldDefault;
+import java.net.URI;
 import org.junit.jupiter.api.Test;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.payload.PayloadDocumentation;
-import org.springframework.restdocs.request.RequestDocumentation;
-import org.springframework.restdocs.restassured.RestDocumentationFilter;
 
 
 class RequestDocumentTest extends BaseTest {
 
     @Test
     void queryParam_생성() {
-
-        // given
-        final var name = new FieldDefault("name", JsonFieldType.STRING);
 
         // when
         final var documentationFilter = document("요청_생성")
@@ -33,24 +24,43 @@ class RequestDocumentTest extends BaseTest {
                           .with(string("orderName").desc("주문이름")))
             .end();
 
-        final var document = RestAssuredRestDocumentationWrapper.document("설명",
-
-                                                                          request -> {
-                                                                              RequestDocumentation.queryParameters(
-                                                                                  parameterWithName(
-                                                                                      "name").description(
-                                                                                      "이름"));
-                                                                          }, response -> {
-                PayloadDocumentation.responseFields(fieldWithPath("data").description("데이터"),
-                                                    fieldWithPath("data.price").description("가격"));
-
-            });
-
-        customGivenWithDocs(documentationFilter)
+        given()
+            .document(documentationFilter)
+            .api()
             .queryParam("name", "친구")
             .get("/sample");
+    }
+
+    @Test
+    void path_생성() {
+
+        // when
+        final var documentationFilter = document("요청_path_param")
+            .pathParam(string("path-name").desc("이름1"))
+            .response(string("order").desc("주문이름"))
+            .end();
+
+        given()
+            .document(documentationFilter)
+            .api()
+            .get("/sample/path/{path-name}", "sample");
 
     }
 
+    @Test
+    void 응답값이_없는경우() {
 
+        // when
+        final var documentationFilter = BaseDocument
+            .document("응답 값이 없는 경우")
+            .pathParam()
+            .response()
+            .end();
+
+        given()
+            .document(documentationFilter)
+            .api()
+            .get("sample/no-data");
+
+    }
 }

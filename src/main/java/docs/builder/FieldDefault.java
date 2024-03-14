@@ -1,6 +1,7 @@
 package docs.builder;
 
 
+import docs.model.JsonDocumentFieldType;
 import lombok.EqualsAndHashCode;
 import org.springframework.restdocs.payload.JsonFieldType;
 
@@ -9,23 +10,23 @@ public class FieldDefault implements Field, FieldGetter {
 
     private final String fieldName;
 
-    private final JsonFieldType jsonFieldType;
+    private final JsonDocumentFieldType jsonDocumentFieldType;
 
     private String desc;
 
     private boolean optional;
 
-    public FieldDefault(String fieldName, JsonFieldType jsonFieldType) {
-        this(fieldName, jsonFieldType, "", false);
+    public FieldDefault(String fieldName, JsonDocumentFieldType JsonDocumentFieldType) {
+        this(fieldName, JsonDocumentFieldType, "", false);
     }
 
-    public FieldDefault(String fieldName, JsonFieldType jsonFieldType, String desc) {
-        this(fieldName, jsonFieldType, desc, false);
+    public FieldDefault(String fieldName, JsonDocumentFieldType JsonDocumentFieldType, String desc) {
+        this(fieldName, JsonDocumentFieldType, desc, false);
     }
 
-    public FieldDefault(String fieldName, JsonFieldType jsonFieldType, String desc, boolean optional) {
+    public FieldDefault(String fieldName, JsonDocumentFieldType JsonDocumentFieldType, String desc, boolean optional) {
         this.fieldName = fieldName;
-        this.jsonFieldType = jsonFieldType;
+        this.jsonDocumentFieldType = JsonDocumentFieldType;
         this.desc = desc;
         this.optional = optional;
     }
@@ -53,8 +54,13 @@ public class FieldDefault implements Field, FieldGetter {
     }
 
     @Override
+    public JsonDocumentFieldType getJsonDocumentFieldType() {
+        return jsonDocumentFieldType;
+    }
+
+    @Override
     public JsonFieldType getJsonFieldType() {
-        return jsonFieldType;
+        return jsonDocumentFieldType.getJsonFieldType();
     }
 
     @Override

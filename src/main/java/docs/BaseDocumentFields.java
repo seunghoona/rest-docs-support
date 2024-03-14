@@ -5,84 +5,93 @@ import docs.builder.Field;
 import docs.builder.FieldCollection;
 import docs.builder.FieldDefault;
 import docs.builder.Fields;
-import org.springframework.restdocs.payload.JsonFieldType;
+import docs.model.JsonDocumentFieldType;
 
 public interface BaseDocumentFields {
 
 	static Field string(String filedName) {
-		return new FieldDefault(filedName, JsonFieldType.STRING);
+		return new FieldDefault(filedName, JsonDocumentFieldType.STRING);
 	}
 
 	static Field string(String filedName, String desc) {
-		return new FieldDefault(filedName, JsonFieldType.STRING, desc);
+		return new FieldDefault(filedName, JsonDocumentFieldType.STRING, desc);
 	}
 
 	static Field string(String filedName, String desc, boolean isOptional) {
-		return new FieldDefault(filedName, JsonFieldType.STRING, desc, isOptional);
+		return new FieldDefault(filedName, JsonDocumentFieldType.STRING, desc, isOptional);
 	}
 
 	static Field number(String filedName) {
-		return new FieldDefault(filedName, JsonFieldType.NUMBER);
+		return new FieldDefault(filedName, JsonDocumentFieldType.NUMBER);
 	}
 
 	static Field number(String filedName, String desc, boolean isOptional) {
-		return new FieldDefault(filedName, JsonFieldType.NUMBER, desc, isOptional);
+		return new FieldDefault(filedName, JsonDocumentFieldType.NUMBER, desc, isOptional);
 	}
 
 	static Field number(String filedName, String desc) {
-		return new FieldDefault(filedName, JsonFieldType.NUMBER, desc);
+		return new FieldDefault(filedName, JsonDocumentFieldType.NUMBER, desc);
 	}
 
 	static Fields object(String filedName) {
-		return new FieldCollection(new FieldDefault(filedName, JsonFieldType.OBJECT));
+		return new FieldCollection(new FieldDefault(filedName, JsonDocumentFieldType.OBJECT));
 	}
 
 	static Fields object(String filedName, String desc, boolean isOptional) {
-		return new FieldCollection(new FieldDefault(filedName, JsonFieldType.OBJECT, desc, isOptional));
+		return new FieldCollection(new FieldDefault(filedName, JsonDocumentFieldType.OBJECT, desc, isOptional));
 	}
 
 	static Fields object(String filedName, String desc) {
-		return new FieldCollection(new FieldDefault(filedName, JsonFieldType.OBJECT, desc));
+		return new FieldCollection(new FieldDefault(filedName, JsonDocumentFieldType.OBJECT, desc));
 	}
 
 	static Fields list(String filedName) {
-		return new FieldCollection(new FieldDefault(filedName, JsonFieldType.ARRAY));
+		return new FieldCollection(new FieldDefault(filedName, JsonDocumentFieldType.ARRAY));
 	}
 
 	static Fields list(String filedName, String desc) {
-		return new FieldCollection(new FieldDefault(filedName, JsonFieldType.ARRAY, desc));
+		return new FieldCollection(new FieldDefault(filedName, JsonDocumentFieldType.ARRAY, desc));
 	}
 
 	static Fields list(String filedName, String desc, boolean isOptional) {
-		return new FieldCollection(new FieldDefault(filedName, JsonFieldType.ARRAY, desc, isOptional));
+		return new FieldCollection(new FieldDefault(filedName, JsonDocumentFieldType.ARRAY, desc, isOptional));
 	}
 
 	static Field bool(String filedName) {
-		return new FieldDefault(filedName, JsonFieldType.BOOLEAN);
+		return new FieldDefault(filedName, JsonDocumentFieldType.BOOLEAN);
 	}
 
 	static Field bool(String filedName, String desc, boolean isOptional) {
-		return new FieldDefault(filedName, JsonFieldType.BOOLEAN, desc, isOptional);
+		return new FieldDefault(filedName, JsonDocumentFieldType.BOOLEAN, desc, isOptional);
 	}
 
 	static Field bool(String filedName, String desc) {
-		return new FieldDefault(filedName, JsonFieldType.BOOLEAN, desc);
+		return new FieldDefault(filedName, JsonDocumentFieldType.BOOLEAN, desc);
 	}
 
 	static Field empty(String filedName) {
-		return new FieldDefault(filedName, JsonFieldType.NULL);
+		return new FieldDefault(filedName, JsonDocumentFieldType.NULL);
 	}
 
 	static Field empty(String filedName, String desc) {
-		return new FieldDefault(filedName, JsonFieldType.NULL, desc);
+		return new FieldDefault(filedName, JsonDocumentFieldType.NULL, desc);
 	}
 
 	static Field empty(String filedName, String desc, boolean isOptional) {
-		return new FieldDefault(filedName, JsonFieldType.NULL, desc, isOptional);
+		return new FieldDefault(filedName, JsonDocumentFieldType.NULL, desc, isOptional);
 	}
 
-/*	static Field enumType(String filedName, String desc) {
-		return defaultEnum(filedName, desc);
-	}*/
+	static Fields type(String filedName) {
+		return new FieldCollection(new FieldDefault(filedName, JsonDocumentFieldType.OBJECT));
+	}
+
+	static Fields type(String filedName, String desc) {
+		return new FieldCollection(new FieldDefault(filedName, JsonDocumentFieldType.OBJECT, desc));
+	}
+
+	static Fields type(String filedName, String desc, boolean isOptional) {
+		return new FieldCollection(new FieldDefault(filedName, JsonDocumentFieldType.OBJECT, desc, isOptional));
+	}
+
 
 }
