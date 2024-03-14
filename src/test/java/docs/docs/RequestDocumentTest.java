@@ -44,7 +44,8 @@ class RequestDocumentTest extends BaseTest {
         given()
             .document(documentationFilter)
             .api()
-            .get("/sample/path/{path-name}", "sample");
+            .pathParam("path-name", "안녕")
+            .get("/sample/path/{path-name}");
 
     }
 

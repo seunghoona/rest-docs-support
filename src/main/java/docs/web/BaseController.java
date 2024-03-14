@@ -74,15 +74,11 @@ public class BaseController {
 
 		private String order = "";
 
-		private JsonDocumentFieldType jsonDocumentFieldType;
 
 		public String getOrder() {
 			return order;
 		}
 
-		public JsonDocumentFieldType getJsonDocumentFieldType() {
-			return jsonDocumentFieldType;
-		}
 	}
 
 	static class SampleProduct {
