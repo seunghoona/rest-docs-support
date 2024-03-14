@@ -3,13 +3,15 @@ package docs.builder;
 import docs.model.JsonDocumentFieldType;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 public class FieldCollection implements Fields {
 
     private final Field field;
-    private final List<Field> fields = new ArrayList<>();
+    private final Set<Field> fields = new HashSet<>();
 
     public FieldCollection(Field field) {
         this.field = field;
@@ -68,7 +70,8 @@ public class FieldCollection implements Fields {
 
     @Override
     public List<Field> getFields() {
-        return this.fields;
+        return this.fields.stream()
+            .toList();
     }
 
     @Override

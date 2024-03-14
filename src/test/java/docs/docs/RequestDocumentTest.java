@@ -1,6 +1,7 @@
 package docs.docs;
 
 import static docs.BaseDocumentFields.list;
+import static docs.BaseDocumentFields.object;
 import static docs.BaseDocumentFields.string;
 import static docs.BaseDocumentFields.type;
 import static docs.docs.BaseDocument.document;
@@ -72,8 +73,13 @@ class RequestDocumentTest extends BaseControllerTest {
         final var documentationFilter = BaseDocument
             .document("응답 값이 없는 경우")
             .requestBody(string("name").desc("설명"))
-            .response(type("contentType").with(string("key").desc("key"),
-                                               string("comment").desc("comment")))
+            .response(type("contentType")
+                          .desc("컨텐츠")
+                          .with(string("key").desc("key"))
+                          .with(string("comment").desc("comment"),
+                                object("headers")
+                                    .with(string("code").desc("key"))
+                                    .with(string("message").desc("comment"))))
             .end();
 
         given()
