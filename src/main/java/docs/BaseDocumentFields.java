@@ -5,6 +5,7 @@ import docs.builder.Field;
 import docs.builder.FieldCollection;
 import docs.builder.FieldDefault;
 import docs.builder.FieldEnum;
+import docs.builder.FieldObject;
 import docs.builder.Fields;
 import docs.model.JsonDocumentFieldType;
 
@@ -35,15 +36,15 @@ public interface BaseDocumentFields {
 	}
 
 	static Fields object(String filedName) {
-		return new FieldCollection(new FieldDefault(filedName, JsonDocumentFieldType.OBJECT));
+		return new FieldObject(new FieldDefault(filedName, JsonDocumentFieldType.OBJECT));
 	}
 
 	static Fields object(String filedName, String desc, boolean isOptional) {
-		return new FieldCollection(new FieldDefault(filedName, JsonDocumentFieldType.OBJECT, desc, isOptional));
+		return new FieldObject(new FieldDefault(filedName, JsonDocumentFieldType.OBJECT, desc, isOptional));
 	}
 
 	static Fields object(String filedName, String desc) {
-		return new FieldCollection(new FieldDefault(filedName, JsonDocumentFieldType.OBJECT, desc));
+		return new FieldObject(new FieldDefault(filedName, JsonDocumentFieldType.OBJECT, desc));
 	}
 
 	static Fields list(String filedName) {

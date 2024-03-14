@@ -1,6 +1,5 @@
 package docs.docs.service;
 
-import static java.util.stream.Collectors.toMap;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 
@@ -11,11 +10,10 @@ import docs.builder.FieldDefault;
 import docs.builder.Fields;
 import docs.docs.Snippets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.PayloadDocumentation;
@@ -25,6 +23,22 @@ import org.springframework.restdocs.restassured.RestDocumentationFilter;
 
 public class EndDocumentServiceImpl implements EndDocumentService {
 
+    /*toMap(Entry::getKey,
+        entry -> entry
+        .getValue()
+        .stream()
+                               .flatMap(subField -> {
+        if (subField instanceof Fields castSubField) {
+            return Stream.concat(castSubField
+                    .getFields()
+                    .stream(),
+                Stream.of(castSubField.getRootField()));
+        } else {
+            return Stream.of(subField);
+        }
+    })
+        .collect(Collectors.toList())
+        )*/
     @Override
     public Snippets convertToSnippet(Map<FieldDocumentType, List<Field>> fields) {
 
@@ -32,21 +46,21 @@ public class EndDocumentServiceImpl implements EndDocumentService {
         final var collect = fields
             .entrySet()
             .stream()
-            .collect(toMap(Entry::getKey,
-                           entry -> entry
-                               .getValue()
-                               .stream()
-                               .flatMap(subField -> {
-                                   if (subField instanceof Fields castSubField) {
-                                       return Stream.concat(castSubField
-                                                                .getFields()
-                                                                .stream(),
-                                                            Stream.of(castSubField.getRootField()));
-                                   } else {
-                                       return Stream.of(subField);
-                                   }
-                               })
-                               .collect(Collectors.toList())));
+            .collect(()-> new HashMap<FieldDocumentType, List<Field>>(),
+                (e, entry) -> {
+                List<Field> list = new ArrayList<>();
+                entry
+                    .getValue()
+                    .forEach(subField -> {
+                        if (subField instanceof Fields castSubField) {
+                            list.addAll(castSubField.getFields());
+                            list.add(castSubField.getRootField());
+                        } else {
+                            list.add(subField);
+                        }
+                    });
+                e.put(entry.getKey(), list);
+            }, HashMap::putAll);
 
         // to Snippet
         final var snippets = collect
@@ -102,9 +116,9 @@ public class EndDocumentServiceImpl implements EndDocumentService {
                             }
 
                             return new FieldDefault(String.format("data.%s", filed.getFieldName()),
-                                                    filed.getJsonDocumentFieldType(),
-                                                    filed.getDesc(),
-                                                    filed.isOptional());
+                                filed.getJsonDocumentFieldType(),
+                                filed.getDesc(),
+                                filed.isOptional());
                         })
                         .map(toFieldDescriptor())
                         .toList();
@@ -124,7 +138,7 @@ public class EndDocumentServiceImpl implements EndDocumentService {
     public RestDocumentationFilter convertToRestDocumentationFilter(String document,
         Map<FieldDocumentType, List<Field>> fields) {
         return RestAssuredRestDocumentationWrapper.document(document,
-                                                            convertToSnippet(fields).toRestDocumentationFilter());
+            convertToSnippet(fields).toRestDocumentationFilter());
     }
 
     private static Function<Field, ParameterDescriptor> toParameterDescriptor() {
