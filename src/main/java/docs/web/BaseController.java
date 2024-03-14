@@ -1,6 +1,7 @@
 package docs.web;
 
 
+import docs.model.JsonDocumentFieldType;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,57 +20,41 @@ import org.springframework.web.bind.annotation.RestController;
 public class BaseController {
 
 	@GetMapping
-	public ResponseEntity<BaseResponse> get(BaseRequest baseRequest) {
+	public ResponseEntity<BaseResponse> getQueryParam(BaseRequest baseRequest) {
 		BaseResponse baseResponse = getBaseResponse();
 		return ResponseEntity.ok(baseResponse);
 	}
 
-	@GetMapping("nodata")
-	public ResponseEntity<BaseResponse> get2(BaseRequest baseRequest) {
+	@GetMapping("/path/{path-name}")
+	public ResponseEntity<BaseResponse> getPathParam(
+		@PathVariable("path-name") String pathName,
+		BaseRequest baseRequest) {
 		BaseResponse baseResponse = new BaseResponse();
-		baseResponse.setHeaders(new Header());
-		baseResponse.setData(new Object());
-
+		baseResponse.setData(new SampleOtherOrder());
 		return ResponseEntity.ok(baseResponse);
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<BaseResponse> get(@PathVariable String id) {
-		BaseResponse baseResponse = getBaseResponse();
-		return ResponseEntity.ok(baseResponse);
-	}
-
-	@GetMapping("/search")
-	public ResponseEntity<List<BaseResponse>> search(BaseRequest baseRequest) {
+	@GetMapping("/no-data")
+	public ResponseEntity<BaseResponse> getNoData(
+		BaseRequest baseRequest) {
 		BaseResponse baseResponse = new BaseResponse();
-		SampleProduct sampleProduct = new SampleProduct();
-		baseResponse.setData(sampleProduct);
-		return ResponseEntity.ok(List.of(baseResponse));
+
+		return ResponseEntity.ok(baseResponse);
+	}
+	@GetMapping("/enum-type")
+	public ResponseEntity<BaseResponse> getEnumType(
+		BaseRequest baseRequest) {
+		BaseResponse baseResponse = new BaseResponse();
+
+		return ResponseEntity.ok(baseResponse);
 	}
 
-	@PostMapping
-	public ResponseEntity<BaseResponse> post(@RequestBody BaseRequest baseRequest) {
-		BaseResponse baseResponse = getBaseResponse();
-		return ResponseEntity.created(URI.create("sample")).body(baseResponse);
-	}
-
-	private BaseResponse getBaseResponse() {
+	private BaseResponse<?> getBaseResponse() {
 		BaseResponse baseResponse = new BaseResponse();
 		SampleProduct sampleProduct = new SampleProduct();
 		sampleProduct.setSamples(List.of(new SampleOrder()));
 		baseResponse.setData(sampleProduct);
 		return baseResponse;
-	}
-
-	@PatchMapping("/{id}")
-	public ResponseEntity<BaseResponse> patch(@PathVariable String id, @RequestBody BaseRequest baseRequest) {
-		BaseResponse baseResponse = getBaseResponse();
-		return ResponseEntity.ok(baseResponse);
-	}
-
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable String id) {
-		return ResponseEntity.noContent().build();
 	}
 
 	static class SampleOrder {
@@ -83,6 +68,17 @@ public class BaseController {
 		public void setOrderName(String orderName) {
 			this.orderName = orderName;
 		}
+	}
+
+	static class SampleOtherOrder {
+
+		private String order = "";
+
+
+		public String getOrder() {
+			return order;
+		}
+
 	}
 
 	static class SampleProduct {
