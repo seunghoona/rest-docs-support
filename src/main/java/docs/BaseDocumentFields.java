@@ -46,15 +46,15 @@ public interface BaseDocumentFields {
 	}
 
 	static Fields list(String filedName) {
-		return new FieldCollection(new FieldDefault(filedName, JsonFieldType.OBJECT));
+		return new FieldCollection(new FieldDefault(filedName, JsonFieldType.ARRAY));
 	}
 
 	static Fields list(String filedName, String desc) {
-		return new FieldCollection(new FieldDefault(filedName, JsonFieldType.OBJECT, desc));
+		return new FieldCollection(new FieldDefault(filedName, JsonFieldType.ARRAY, desc));
 	}
 
 	static Fields list(String filedName, String desc, boolean isOptional) {
-		return new FieldCollection(new FieldDefault(filedName, JsonFieldType.OBJECT, desc, isOptional));
+		return new FieldCollection(new FieldDefault(filedName, JsonFieldType.ARRAY, desc, isOptional));
 	}
 
 	static Field bool(String filedName) {

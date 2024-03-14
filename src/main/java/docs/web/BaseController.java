@@ -19,57 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class BaseController {
 
 	@GetMapping
-	public ResponseEntity<BaseResponse> get(BaseRequest baseRequest) {
+	public ResponseEntity<BaseResponse> getSample(BaseRequest baseRequest) {
 		BaseResponse baseResponse = getBaseResponse();
 		return ResponseEntity.ok(baseResponse);
 	}
 
-	@GetMapping("nodata")
-	public ResponseEntity<BaseResponse> get2(BaseRequest baseRequest) {
-		BaseResponse baseResponse = new BaseResponse();
-		baseResponse.setHeaders(new Header());
-		baseResponse.setData(new Object());
-
-		return ResponseEntity.ok(baseResponse);
-	}
-
-	@GetMapping("/{id}")
-	public ResponseEntity<BaseResponse> get(@PathVariable String id) {
-		BaseResponse baseResponse = getBaseResponse();
-		return ResponseEntity.ok(baseResponse);
-	}
-
-	@GetMapping("/search")
-	public ResponseEntity<List<BaseResponse>> search(BaseRequest baseRequest) {
-		BaseResponse baseResponse = new BaseResponse();
-		SampleProduct sampleProduct = new SampleProduct();
-		baseResponse.setData(sampleProduct);
-		return ResponseEntity.ok(List.of(baseResponse));
-	}
-
-	@PostMapping
-	public ResponseEntity<BaseResponse> post(@RequestBody BaseRequest baseRequest) {
-		BaseResponse baseResponse = getBaseResponse();
-		return ResponseEntity.created(URI.create("sample")).body(baseResponse);
-	}
-
-	private BaseResponse getBaseResponse() {
+	private BaseResponse<?> getBaseResponse() {
 		BaseResponse baseResponse = new BaseResponse();
 		SampleProduct sampleProduct = new SampleProduct();
 		sampleProduct.setSamples(List.of(new SampleOrder()));
 		baseResponse.setData(sampleProduct);
 		return baseResponse;
-	}
-
-	@PatchMapping("/{id}")
-	public ResponseEntity<BaseResponse> patch(@PathVariable String id, @RequestBody BaseRequest baseRequest) {
-		BaseResponse baseResponse = getBaseResponse();
-		return ResponseEntity.ok(baseResponse);
-	}
-
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable String id) {
-		return ResponseEntity.noContent().build();
 	}
 
 	static class SampleOrder {

@@ -51,7 +51,7 @@ public class FieldCollection implements Fields {
                 }
 
                 if (JsonFieldType.ARRAY.equals(rootFieldType)) {
-                    return new FieldDefault(String.format("%s[].%s", rootName, subField),
+                    return new FieldDefault(String.format("%s[].%s", rootName, subFieldName),
                                             subField.getJsonFieldType(),
                                             subField.getDesc(),
                                             subField.isOptional());

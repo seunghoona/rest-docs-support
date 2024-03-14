@@ -14,8 +14,7 @@ public class DocumentDefaultConfig {
 
     public Map<FieldDocumentType, List<Field>> get() {
 
-        final var headers = object("headers")
-            .desc("성장")
+        final var headers = object("headers").desc("성장")
             .with(string("code", "응답 코드"))
             .with(string("message", "메시지"));
 

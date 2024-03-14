@@ -1,6 +1,5 @@
 package docs.docs.service;
 
-import static docs.builder.DocumentBuilder.FieldDocumentType.QUERY_PARAM;
 import static java.util.stream.Collectors.toMap;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -8,14 +7,9 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import docs.builder.DocumentBuilder.FieldDocumentType;
 import docs.builder.Field;
-import docs.builder.FieldCollection;
 import docs.builder.FieldDefault;
 import docs.builder.Fields;
 import docs.docs.Snippets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,7 +17,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.restdocs.payload.FieldDescriptor;
-import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.restdocs.request.RequestDocumentation;
@@ -43,7 +36,9 @@ public class EndDocumentServiceImpl implements EndDocumentService {
                                .stream()
                                .flatMap(subField -> {
                                    if (subField instanceof Fields castSubField) {
-                                       return Stream.concat(castSubField.getFields().stream(),
+                                       return Stream.concat(castSubField
+                                                                .getFields()
+                                                                .stream(),
                                                             Stream.of(castSubField.getRootField()));
                                    } else {
                                        return Stream.of(subField);
@@ -80,6 +75,23 @@ public class EndDocumentServiceImpl implements EndDocumentService {
                 case RESPONSE -> docFields
                     .getValue()
                     .stream()
+                    .map(responseField -> {
+
+                        final var filed = responseField.toGetFiled();
+
+                        if (filed
+                                .getFieldName()
+                                .contains("headers") || filed
+                                .getFieldName()
+                                .equals("data")) {
+                            return responseField;
+                        }
+
+                        return new FieldDefault(String.format("data.%s", filed.getFieldName()),
+                                                filed.getJsonFieldType(),
+                                                filed.getDesc(),
+                                                filed.isOptional());
+                    })
                     .map(toFieldDescriptor())
                     .map(PayloadDocumentation::responseFields);
 
@@ -89,7 +101,6 @@ public class EndDocumentServiceImpl implements EndDocumentService {
 
         return Snippets.of(snippets);
     }
-
 
 
     @Override
@@ -119,32 +130,4 @@ public class EndDocumentServiceImpl implements EndDocumentService {
                    : type;
         };
     }
-//
-//    private static Function<Entry<FieldDocumentType, Collection<Field>>, FieldDefault> getFunction() {
-//        return field -> {
-//            final var rootField = field.toGetFiled();
-//            final var rootName = rootField.getFieldName();
-//            final var rootFieldType = rootField.getJsonFieldType();
-//
-//            final var subField = field.toGetFiled();
-//            final var subFieldName = subField.getFieldName();
-//
-//            if (JsonFieldType.OBJECT.equals(rootFieldType)) {
-//                return new FieldDefault(String.format("%s.%s", rootName, subFieldName),
-//                                        subField.getJsonFieldType(),
-//                                        subField.getDesc(),
-//                                        subField.isOptional());
-//            }
-//
-//            if (JsonFieldType.ARRAY.equals(rootFieldType)) {
-//                return new FieldDefault(String.format("%s[].%s", rootName, subField),
-//                                        subField.getJsonFieldType(),
-//                                        subField.getDesc(),
-//                                        subField.isOptional());
-//            }
-//
-//            throw new UnsupportedOperationException();
-//        };
-//    }
-
 }
