@@ -76,7 +76,7 @@ public class EndDocumentServiceImpl implements EndDocumentService {
                     yield Stream.of(RequestDocumentation.pathParameters(pathParams));
                 }
 
-                case REQUEST -> {
+                case REQUEST, REQUEST_BODY -> {
                     final var requestFields = docFields
                         .getValue()
                         .stream()
@@ -112,7 +112,7 @@ public class EndDocumentServiceImpl implements EndDocumentService {
                     yield Stream.of(PayloadDocumentation.responseFields(responseFields));
                 }
 
-                default -> throw new UnsupportedOperationException();
+                default -> throw new UnsupportedOperationException("문서 작업중, 잘못된 문서 생성 사용중.");
             })
             .toList();
 

@@ -6,12 +6,11 @@ import static docs.BaseDocumentFields.type;
 import static docs.docs.BaseDocument.document;
 
 import docs.BaseDocument;
-import docs.BaseTest;
-import java.net.URI;
+import docs.BaseControllerTest;
 import org.junit.jupiter.api.Test;
 
 
-class RequestDocumentTest extends BaseTest {
+class RequestDocumentTest extends BaseControllerTest {
 
     @Test
     void queryParam_생성() {
@@ -63,6 +62,26 @@ class RequestDocumentTest extends BaseTest {
             .document(documentationFilter)
             .api()
             .get("sample/no-data");
+
+    }
+
+    @Test
+    void request_body() {
+
+        // when
+        final var documentationFilter = BaseDocument
+            .document("응답 값이 없는 경우")
+            .requestBody(string("name").desc("설명"))
+            .response()
+            .end();
+
+        given()
+            .document(documentationFilter)
+            .api()
+            .body("""
+                {"name": "tjfa"}
+            """)
+            .post("sample/request-body");
 
     }
 

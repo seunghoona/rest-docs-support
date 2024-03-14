@@ -41,13 +41,14 @@ public class BaseController {
 
 		return ResponseEntity.ok(baseResponse);
 	}
-	@GetMapping("/enum-type")
-	public ResponseEntity<BaseResponse> getEnumType(
-		BaseRequest baseRequest) {
+	@PostMapping("/request-body")
+	public ResponseEntity<BaseResponse> saveRequestBody(
+		@RequestBody String name) {
+
 		BaseResponse baseResponse = new BaseResponse();
 
 		return ResponseEntity.ok(baseResponse);
-	}
+	}	@GetMapping("/enum-type")
 
 	private BaseResponse<?> getBaseResponse() {
 		BaseResponse baseResponse = new BaseResponse();
