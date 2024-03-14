@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 @EqualsAndHashCode(of = "fieldName")
-public class FieldDefaultBuilder implements Field, FieldGetter {
+public class FieldDefault implements Field, FieldGetter {
 
     private final String fieldName;
 
@@ -15,15 +15,15 @@ public class FieldDefaultBuilder implements Field, FieldGetter {
 
     private boolean optional;
 
-    public FieldDefaultBuilder(String fieldName, JsonFieldType jsonFieldType) {
+    public FieldDefault(String fieldName, JsonFieldType jsonFieldType) {
         this(fieldName, jsonFieldType, "", false);
     }
 
-    public FieldDefaultBuilder(String fieldName, JsonFieldType jsonFieldType, String desc) {
+    public FieldDefault(String fieldName, JsonFieldType jsonFieldType, String desc) {
         this(fieldName, jsonFieldType, desc, false);
     }
 
-    public FieldDefaultBuilder(String fieldName, JsonFieldType jsonFieldType, String desc, boolean optional) {
+    public FieldDefault(String fieldName, JsonFieldType jsonFieldType, String desc, boolean optional) {
         this.fieldName = fieldName;
         this.jsonFieldType = jsonFieldType;
         this.desc = desc;

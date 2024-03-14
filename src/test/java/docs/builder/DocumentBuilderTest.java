@@ -13,8 +13,8 @@ class DocumentBuilderTest {
 
         // given
         final var requestDocumentBuilder = BaseDocument.document("문서");
-        final var nameStr1 = new FieldDefaultBuilder("name", JsonFieldType.STRING);
-        final var nameStr2 = new FieldDefaultBuilder("name", JsonFieldType.STRING);
+        final var nameStr1 = new FieldDefault("name", JsonFieldType.STRING);
+        final var nameStr2 = new FieldDefault("name", JsonFieldType.STRING);
 
         // then
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -29,8 +29,8 @@ class DocumentBuilderTest {
         // given
         final var requestDocumentBuilder = BaseDocument.document("문서");
 
-        final var nameStr = new FieldDefaultBuilder("name", JsonFieldType.STRING);
-        final var object = new FieldDefaultBuilder("name", JsonFieldType.OBJECT);
+        final var nameStr = new FieldDefault("name", JsonFieldType.STRING);
+        final var object = new FieldDefault("name", JsonFieldType.OBJECT);
 
         // then
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
