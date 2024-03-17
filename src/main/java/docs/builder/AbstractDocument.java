@@ -2,6 +2,7 @@ package docs.builder;
 
 import docs.builder.DocumentBuilder.FieldDocumentType;
 import docs.config.DefaultResponse;
+import docs.config.DocumentConfig;
 import docs.config.DocumentDefaultConfig;
 import docs.docs.service.EndDocumentService;
 import docs.docs.service.EndDocumentServiceImpl;
@@ -15,7 +16,7 @@ public abstract class AbstractDocument {
 
     protected String document;
     protected Map<FieldDocumentType, List<Field>> fields = new HashMap<>();
-    private final DocumentDefaultConfig documentDefaultConfig = new DocumentDefaultConfig();
+    private final DocumentConfig documentDefaultConfig = new DocumentDefaultConfig();
     protected EndDocumentService endDocumentService;
 
     public AbstractDocument(String document) {
