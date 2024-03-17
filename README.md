@@ -1,4 +1,4 @@
-# Rest docs Support
+# Rest Docs Support
 
 ---
 
