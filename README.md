@@ -65,7 +65,7 @@ localhost:8080
     "product" : {
         "id": 1, 
         "name": "data", 
-        "number": "data"
+        "number": 2000
     }
 }
 ```

@@ -1,6 +1,7 @@
 package docs.builder;
 
 import docs.builder.DocumentBuilder.FieldDocumentType;
+import docs.config.DefaultResponse;
 import docs.config.DocumentDefaultConfig;
 import docs.docs.service.EndDocumentService;
 import docs.docs.service.EndDocumentServiceImpl;
@@ -13,15 +14,18 @@ import java.util.stream.Collectors;
 public abstract class AbstractDocument {
 
     protected String document;
-    protected EndDocumentService endDocumentService = new EndDocumentServiceImpl();
-    protected DocumentDefaultConfig config = new DocumentDefaultConfig();
-    protected Map<FieldDocumentType, List<Field>> fields;
+    protected Map<FieldDocumentType, List<Field>> fields = new HashMap<>();
+    private final DocumentDefaultConfig documentDefaultConfig = new DocumentDefaultConfig();
+    protected EndDocumentService endDocumentService;
 
     public AbstractDocument(String document) {
         this.document = document;
-        this.fields = new HashMap<>();
-
-        this.fields.putAll(config.get());
+        final var config = documentDefaultConfig.getResponseConfig();
+        this.fields.putAll(config.toMap());
+        this.endDocumentService = new EndDocumentServiceImpl(
+            config.getIgnoredFields(),
+            config.getWrapDataField()
+        );
     }
 
     protected void processes(Field[] enterFields, FieldDocumentType type) {

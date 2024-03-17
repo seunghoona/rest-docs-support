@@ -7,6 +7,7 @@ import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import docs.builder.DocumentBuilder.FieldDocumentType;
 import docs.builder.Field;
 import docs.builder.FieldDefault;
+import docs.builder.FieldGetter;
 import docs.builder.Fields;
 import docs.docs.Snippets;
 import java.util.ArrayList;
@@ -15,30 +16,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import lombok.RequiredArgsConstructor;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 
+@RequiredArgsConstructor
 public class EndDocumentServiceImpl implements EndDocumentService {
 
-    /*toMap(Entry::getKey,
-        entry -> entry
-        .getValue()
-        .stream()
-                               .flatMap(subField -> {
-        if (subField instanceof Fields castSubField) {
-            return Stream.concat(castSubField
-                    .getFields()
-                    .stream(),
-                Stream.of(castSubField.getRootField()));
-        } else {
-            return Stream.of(subField);
-        }
-    })
-        .collect(Collectors.toList())
-        )*/
+    private final List<Field> ignoreFields;
+    private final Field warpField;
+
     @Override
     public Snippets convertToSnippet(Map<FieldDocumentType, List<Field>> fields) {
 
@@ -105,20 +95,22 @@ public class EndDocumentServiceImpl implements EndDocumentService {
                         .stream()
                         .map(responseField -> {
 
-                            final var filed = responseField.toGetFiled();
+                            final var getField = responseField.toGetFiled();
 
-                            if (filed
-                                    .getFieldName()
-                                    .contains("headers") || filed
-                                    .getFieldName()
-                                    .equals("data")) {
+                            if (ignoreFields.stream().anyMatch(field ->
+                                field.equals(responseField) ||
+                                getField.getFieldName().startsWith(field.toGetFiled().getFieldName()))
+                            ) {
+
                                 return responseField;
                             }
 
-                            return new FieldDefault(String.format("data.%s", filed.getFieldName()),
-                                filed.getJsonDocumentFieldType(),
-                                filed.getDesc(),
-                                filed.isOptional());
+                            final var wrapField = this.warpField.toGetFiled();
+
+                            return new FieldDefault(String.format("%s.%s", wrapField.getFieldName(), getField.getFieldName()),
+                                getField.getJsonDocumentFieldType(),
+                                getField.getDesc(),
+                                getField.isOptional());
                         })
                         .map(toFieldDescriptor())
                         .toList();
