@@ -24,7 +24,9 @@ RestDocs Support is a library that makes it easier to write Spring Rest Docs and
 - JAVA 17
 - Spring 3.0.x
 
+## License
 
+Please refer to [LICENSE](https://github.com/seunghoona/rest-docs-support/blob/main/LICENSE.txt)
 
 
 ## 1. How to use 'Rest docs Support'
