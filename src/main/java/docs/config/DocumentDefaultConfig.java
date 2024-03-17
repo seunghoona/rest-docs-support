@@ -3,14 +3,10 @@ package docs.config;
 import static docs.BaseDocumentFields.object;
 import static docs.BaseDocumentFields.string;
 
-import docs.builder.DocumentBuilder.FieldDocumentType;
-import docs.builder.Field;
-import java.util.List;
-import java.util.Map;
 
+public class DocumentDefaultConfig implements DocumentConfig {
 
-public class DocumentDefaultConfig {
-
+    @Override
     public DefaultResponse getResponseConfig() {
 
         final var headers = object("headers").desc("응답 헤더")
@@ -19,8 +15,9 @@ public class DocumentDefaultConfig {
 
         return DefaultResponse
             .builder()
-            .defaultField(headers)
+            .withField(headers)
             .wrapData(object("data").desc("데이터"))
             .build();
     }
+
 }

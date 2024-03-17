@@ -37,7 +37,7 @@ public class DefaultResponse {
             return this;
         }
 
-        public DefaultResponseBuilder defaultField(Field defaultField) {
+        public DefaultResponseBuilder withField(Field defaultField) {
             this.defaultField = defaultField;
             return this;
         }
