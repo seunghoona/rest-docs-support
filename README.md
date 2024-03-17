@@ -76,7 +76,7 @@ localhost:8080
     "product" : {
         "id": 1, 
         "name": "data", 
-        "number": 2000
+        "price": 2000
     }
 }
 ```
@@ -87,7 +87,7 @@ localhost:8080
     "product" : {
         "id": 1, 
         "name": "data", 
-        "number": "data"
+        "price": "data"
     }
 }
 ```
@@ -171,7 +171,7 @@ localhost:8080
             )
             .response(
                 string("email").desc("this is email"),
-                string("email").desc("this is phone")
+                string("phone").desc("this is phone")
             )
             .end();
     }
