@@ -47,6 +47,12 @@ public interface BaseDocumentFields {
 		return new FieldObject(new FieldDefault(filedName, JsonDocumentFieldType.OBJECT, desc));
 	}
 
+
+	static Fields list() {
+		return new FieldCollection(new FieldDefault("[]", JsonDocumentFieldType.ARRAY));
+	}
+
+
 	static Fields list(String filedName) {
 		return new FieldCollection(new FieldDefault(filedName, JsonDocumentFieldType.ARRAY));
 	}

@@ -3,7 +3,6 @@ package docs.docs;
 import static docs.BaseDocumentFields.list;
 import static docs.BaseDocumentFields.object;
 import static docs.BaseDocumentFields.string;
-import static docs.BaseDocumentFields.type;
 import static docs.docs.BaseDocument.document;
 
 import docs.BaseControllerTest;
@@ -20,9 +19,9 @@ class RequestDocumentTest extends BaseControllerTest {
         final var documentationFilter = document("요청_생성")
             .queryParam(string("name").desc("이름1"))
             .response(string("price").desc("가격"),
-                      list("samples")
-                          .desc("샘플")
-                          .with(string("orderName").desc("주문이름")))
+                list("samples")
+                    .desc("샘플")
+                    .with(string("orderName").desc("주문이름")))
             .end();
 
         given()
@@ -65,24 +64,46 @@ class RequestDocumentTest extends BaseControllerTest {
             .get("sample/no-data");
 
     }
+    //    final var documentationFilter = BaseDocument
+    //        .document("리스트")
+    //        .requestBody(
+    //            list("list").desc("리스트")
+    //        )
+    //        .response(type("contentType")
+    //            .desc("컨텐츠")
+    //            .with(string("key").desc("key"))
+    //            .with(string("comment").desc("comment"),
+    //                object("headers")
+    //                    .with(string("code").desc("key"))
+    //                    .with(string("message").desc("comment"))))
+    //        .end();
 
     @Test
-    void request_body() {
+    void nestingList() {
 
         // when
         final var documentationFilter = BaseDocument
-            .document("응답 값이 없는 경우")
-            .requestBody(string("name").desc("설명"))
-            .response(type("contentType")
-                          .desc("컨텐츠")
-                          .with(string("key").desc("key"))
-                          .with(string("comment").desc("comment"),
-                                object("headers")
-                                    .with(string("code").desc("key"))
-                                    .with(string("message").desc("comment"))))
+            .document("리스트")
+            .requestBody(
+                list("[][]").desc("리스트").with()
+            )
+            .response(object("headers")
+                .with(string("code").desc("code"))
+                .with(string("message").desc("comment")))
             .end();
 
-
+        given()
+            .document(documentationFilter)
+            .api()
+            .body(""" 
+                         
+                         [
+                             ["안녕"],
+                             ["안녕"]
+                         ]
+                         
+                """)
+            .post("sample/list");
     }
 
 

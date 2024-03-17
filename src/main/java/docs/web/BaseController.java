@@ -37,18 +37,16 @@ public class BaseController {
 	@GetMapping("/no-data")
 	public ResponseEntity<BaseResponse> getNoData(
 		BaseRequest baseRequest) {
-		BaseResponse baseResponse = new BaseResponse();
 
-		return ResponseEntity.ok(baseResponse);
+		return ResponseEntity.ok(new BaseResponse());
 	}
-	@PostMapping("/request-body")
+
+	@PostMapping("/list")
 	public ResponseEntity<BaseResponse> saveRequestBody(
-		@RequestBody String name) {
+		@RequestBody List<List<String>> list) {
 
-		BaseResponse baseResponse = new BaseResponse();
-
-		return ResponseEntity.ok(baseResponse);
-	}	@GetMapping("/enum-type")
+		return ResponseEntity.ok(new BaseResponse());
+	}
 
 	private BaseResponse<?> getBaseResponse() {
 		BaseResponse baseResponse = new BaseResponse();
