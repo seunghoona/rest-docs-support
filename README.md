@@ -30,14 +30,23 @@ Please refer to [LICENSE](https://github.com/seunghoona/rest-docs-support/blob/m
 
 
 ## 1. How to use 'Rest docs Support'
-0. [Fields](#basedocumentfields)
-1. [How To Request body](#how-to-request-body)
-2. [How to Use Query Param](#how-to-use-query-param-)
-3. [How to use pathParam](#how-to-use-pathparam-)
+1. [Create Document](#basedocument)
+2. [Fields](#basedocumentfields)
+3. [How To Request body](#how-to-request-body)
+4. [How to Use Query Param](#how-to-use-query-param-)
+5. [How to use pathParam](#how-to-use-pathparam-)
 
 
+### BaseDocument
 
+Below is the class declaration that should be declared and used to generate the document.
+```java
 
+void main() {
+    BaseDocument.document("put your document name");    
+}
+
+```
 
 ### BaseDocumentFields
 
