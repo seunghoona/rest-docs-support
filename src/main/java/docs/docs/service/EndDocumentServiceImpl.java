@@ -115,14 +115,22 @@ public class EndDocumentServiceImpl implements EndDocumentService {
                                 return responseField;
                             }
 
-                            final var wrapField = this.warpField.toGetFiled();
+                            if (warpField != null) {
+                                final var wrapField = this.warpField.toGetFiled();
 
-                            return new FieldDefault(String.format("%s.%s",
-                                wrapField.getFieldName(),
-                                getField.getFieldName()),
+                                return new FieldDefault(String.format("%s.%s",
+                                    wrapField.getFieldName(),
+                                    getField.getFieldName()),
+                                    getField.getJsonDocumentFieldType(),
+                                    getField.getDesc(),
+                                    getField.isOptional());
+                            }
+
+                            return new FieldDefault(getField.getFieldName(),
                                 getField.getJsonDocumentFieldType(),
                                 getField.getDesc(),
                                 getField.isOptional());
+
                         })
                         .map(toFieldDescriptor())
                         .toList();

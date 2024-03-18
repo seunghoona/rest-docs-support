@@ -4,6 +4,7 @@ import docs.builder.DocumentBuilder.FieldDocumentType;
 import docs.builder.Field;
 import docs.builder.Fields;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,8 +44,14 @@ public class DefaultResponse {
         }
 
         public DefaultResponse build() {
-            this.fields.add(wrapDataField);
-            this.fields.add(defaultField);
+            if (!(wrapDataField == null)) {
+                this.fields.add(wrapDataField);
+            }
+
+            if (!(defaultField == null)) {
+                this.fields.add(defaultField);
+            }
+
             return new DefaultResponse(wrapDataField, defaultField, this.fields);
         }
     }
@@ -56,6 +63,9 @@ public class DefaultResponse {
     }
 
     public List<Field> getIgnoredFields() {
+        if (fields.isEmpty()) {
+            return Collections.emptyList();
+        }
         return fields.stream()
             .map(field -> ((Fields) field).getRootField())
             .toList();
