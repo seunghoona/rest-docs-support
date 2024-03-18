@@ -5,8 +5,9 @@ import docs.docs.RequestDocument;
 import docs.docs.Snippets;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 
-
 public class DocumentBuilder extends AbstractDocument implements Document {
+
+    private final String document;
 
     public enum FieldDocumentType {
         REQUEST, QUERY_PARAM, REQUEST_BODY, PATH_PARAM, MULTIPART, RESPONSE
@@ -17,7 +18,7 @@ public class DocumentBuilder extends AbstractDocument implements Document {
     }
 
     private DocumentBuilder(String document) {
-        super(document);
+        this.document = document;
     }
 
     @Override
@@ -69,7 +70,7 @@ public class DocumentBuilder extends AbstractDocument implements Document {
 
     @Override
     public RestDocumentationFilter end() {
-        return endDocumentService.convertToRestDocumentationFilter(super.document, super.fields);
+        return endDocumentService.convertToRestDocumentationFilter(this.document, super.fields);
     }
 
 

@@ -16,20 +16,20 @@ public abstract class AbstractDocument {
     private static final DocumentConfig DOCUMENT_CONFIG = new DocumentDefaultConfig();
     private static final EndDocumentService END_DOCUMENT_SERVICE_SERVICE = new EndDocumentServiceImpl();
 
-    protected String document;
-    protected Map<FieldDocumentType, List<Field>> fields = new HashMap<>();
-    protected EndDocumentService endDocumentService;
+    protected final Map<FieldDocumentType, List<Field>> fields = new HashMap<>();
 
-    public AbstractDocument(String document) {
-        this.document = document;
-        init();
+    private final DocumentConfig documentConfig;
+    protected final EndDocumentService endDocumentService;
+
+    public AbstractDocument() {
+        this.documentConfig = DOCUMENT_CONFIG;
+        this.endDocumentService = END_DOCUMENT_SERVICE_SERVICE.setUp(DOCUMENT_CONFIG);
+        initFields();
     }
 
-    private void init() {
-        final var config = DOCUMENT_CONFIG.getResponseConfig();
+    private void initFields() {
+        final var config = documentConfig.getResponseConfig();
         this.fields.putAll(config.toMap());
-        END_DOCUMENT_SERVICE_SERVICE.setUp(DOCUMENT_CONFIG);
-        this.endDocumentService = END_DOCUMENT_SERVICE_SERVICE;
     }
 
     protected void processes(Field[] enterFields, FieldDocumentType type) {

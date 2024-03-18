@@ -2,9 +2,9 @@ package docs.docs;
 
 import docs.builder.DocumentBuilder;
 
-public class BaseDocument {
+public interface BaseDocument {
 
-    public static RequestDocument document(String document) {
+    static RequestDocument document(String document) {
         return DocumentBuilder.of(document);
     }
 

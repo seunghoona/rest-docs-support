@@ -30,10 +30,11 @@ public class EndDocumentServiceImpl implements EndDocumentService {
     private Field warpField;
     
     @Override
-    public void setUp(DocumentConfig defaultConfig) {
+    public EndDocumentService setUp(DocumentConfig defaultConfig) {
         final var config = defaultConfig.getResponseConfig();
         this.ignoreFields = config.getIgnoredFields();
         this.warpField = config.getWrapDataField();
+        return this;
     }
 
     @Override

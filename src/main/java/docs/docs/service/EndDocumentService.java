@@ -11,7 +11,7 @@ import org.springframework.restdocs.restassured.RestDocumentationFilter;
 
 public interface EndDocumentService {
 
-    void setUp(DocumentConfig config);
+    EndDocumentService setUp(DocumentConfig config);
 
     Snippets convertToSnippet(Map<FieldDocumentType, List<Field>> fields);
 
