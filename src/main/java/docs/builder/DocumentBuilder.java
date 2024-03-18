@@ -5,6 +5,7 @@ import docs.docs.RequestDocument;
 import docs.docs.Snippets;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 
+
 public class DocumentBuilder extends AbstractDocument implements Document {
 
     public enum FieldDocumentType {
@@ -15,7 +16,7 @@ public class DocumentBuilder extends AbstractDocument implements Document {
         return new DocumentBuilder(document);
     }
 
-    protected DocumentBuilder(String document) {
+    private DocumentBuilder(String document) {
         super(document);
     }
 

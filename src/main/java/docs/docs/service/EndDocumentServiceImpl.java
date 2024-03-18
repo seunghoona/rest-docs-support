@@ -7,8 +7,9 @@ import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import docs.builder.DocumentBuilder.FieldDocumentType;
 import docs.builder.Field;
 import docs.builder.FieldDefault;
-import docs.builder.FieldGetter;
 import docs.builder.Fields;
+import docs.config.DefaultResponse;
+import docs.config.DocumentConfig;
 import docs.docs.Snippets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,18 +17,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
-import lombok.RequiredArgsConstructor;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 
-@RequiredArgsConstructor
+
 public class EndDocumentServiceImpl implements EndDocumentService {
 
-    private final List<Field> ignoreFields;
-    private final Field warpField;
+    private List<Field> ignoreFields;
+    private Field warpField;
+    
+    @Override
+    public void setUp(DocumentConfig defaultConfig) {
+        final var config = defaultConfig.getResponseConfig();
+        this.ignoreFields = config.getIgnoredFields();
+        this.warpField = config.getWrapDataField();
+    }
 
     @Override
     public Snippets convertToSnippet(Map<FieldDocumentType, List<Field>> fields) {
@@ -36,8 +43,7 @@ public class EndDocumentServiceImpl implements EndDocumentService {
         final var collect = fields
             .entrySet()
             .stream()
-            .collect(()-> new HashMap<FieldDocumentType, List<Field>>(),
-                (e, entry) -> {
+            .collect(() -> new HashMap<FieldDocumentType, List<Field>>(), (e, entry) -> {
                 List<Field> list = new ArrayList<>();
                 entry
                     .getValue()
@@ -97,17 +103,22 @@ public class EndDocumentServiceImpl implements EndDocumentService {
 
                             final var getField = responseField.toGetFiled();
 
-                            if (ignoreFields.stream().anyMatch(field ->
-                                field.equals(responseField) ||
-                                getField.getFieldName().startsWith(field.toGetFiled().getFieldName()))
-                            ) {
+                            if (ignoreFields
+                                .stream()
+                                .anyMatch(field -> field.equals(responseField) || getField
+                                    .getFieldName()
+                                    .startsWith(field
+                                        .toGetFiled()
+                                        .getFieldName()))) {
 
                                 return responseField;
                             }
 
                             final var wrapField = this.warpField.toGetFiled();
 
-                            return new FieldDefault(String.format("%s.%s", wrapField.getFieldName(), getField.getFieldName()),
+                            return new FieldDefault(String.format("%s.%s",
+                                wrapField.getFieldName(),
+                                getField.getFieldName()),
                                 getField.getJsonDocumentFieldType(),
                                 getField.getDesc(),
                                 getField.isOptional());
@@ -118,7 +129,7 @@ public class EndDocumentServiceImpl implements EndDocumentService {
                     yield Stream.of(PayloadDocumentation.responseFields(responseFields));
                 }
 
-                default -> throw new UnsupportedOperationException("문서 작업중, 잘못된 문서 생성 사용중.");
+                default -> throw new UnsupportedOperationException("Undefined document type " + docFields.getKey());
             })
             .toList();
 

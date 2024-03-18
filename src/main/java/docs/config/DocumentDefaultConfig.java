@@ -3,6 +3,13 @@ package docs.config;
 import static docs.BaseDocumentFields.object;
 import static docs.BaseDocumentFields.string;
 
+import docs.docs.service.EndDocumentService;
+import docs.docs.service.EndDocumentServiceImpl;
+import java.beans.JavaBean;
+import lombok.Getter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 
 public class DocumentDefaultConfig implements DocumentConfig {
 
