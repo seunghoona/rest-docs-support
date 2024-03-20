@@ -15,7 +15,7 @@ RestDocs Support is a library that makes it easier to write Spring Rest Docs and
         maven { url 'https://jitpack.io' }
     }
 
-    implementation 'com.github.seunghoona:restdocsAdapter:0.9.7:plain'
+    implementation 'com.github.seunghoona:rest-docs-support:0.9.8:plain'
 
 ```
 
