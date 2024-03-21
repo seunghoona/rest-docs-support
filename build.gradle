@@ -5,7 +5,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.3'
 }
 
-group 'com.seunghoona.restdocs'
+group 'com.seunghoona.rest-docs-support'
 version '1.0-SNAPSHOT'
 
 repositories {
