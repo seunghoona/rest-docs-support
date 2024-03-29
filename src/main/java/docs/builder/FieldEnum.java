@@ -38,9 +38,18 @@ public class FieldEnum implements Fields {
 
     @Override
     public void changeName(String fieldName) {
-        this.field.changeName(fieldName);
         this.fields
-            .forEach(field -> field.changeName(String.format("%s.%s", fieldName,field.toGetFiled().getFieldName())));
+            .forEach(field -> {
+                final var code = field
+                    .toGetFiled()
+                    .getFieldName()
+                    .split(this.field.toGetFiled().getFieldName());
+
+                if(code.length == 2) {
+                    field.changeName(String.format("%s%s", fieldName, code[1]));
+                }
+            });
+        this.field.changeName(fieldName);
     }
 
     @Override
@@ -67,8 +76,11 @@ public class FieldEnum implements Fields {
                                 subField.isOptional());
     }
 
-    private FieldDefault createField(String subField, String desc) {
-        return new FieldDefault(subField,
+    private FieldDefault createField(String subFieldName, String desc) {
+        final var rootField = this.field.toGetFiled();
+        final var rootName = rootField.getFieldName();
+
+        return new FieldDefault(String.format("%s.%s", rootName, subFieldName),
                                 JsonDocumentFieldType.STRING,
                                 desc, false);
     }

@@ -28,8 +28,8 @@ class RequestDocumentTest extends BaseControllerTest {
                     .with(
                         string("sample").desc("샘플")
                         ,type("sampleType").desc("샘플")
-                    )
-
+                    ),
+                type("ageType").desc("asdf")
             )
             .end();
 
