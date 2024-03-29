@@ -7,6 +7,7 @@ import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import docs.builder.DocumentBuilder.FieldDocumentType;
 import docs.builder.Field;
 import docs.builder.FieldDefault;
+import docs.builder.FieldUnrWrap;
 import docs.builder.Fields;
 import docs.config.DefaultResponse;
 import docs.config.DocumentConfig;
@@ -113,6 +114,15 @@ public class EndDocumentServiceImpl implements EndDocumentService {
                                         .getFieldName()))) {
 
                                 return responseField;
+                            }
+
+                            if (responseField instanceof FieldUnrWrap) {
+
+                                return new FieldDefault(String.format("pageable.%s",
+                                    getField.getFieldName()),
+                                    getField.getJsonDocumentFieldType(),
+                                    getField.getDesc(),
+                                    getField.isOptional());
                             }
 
                             if (warpField != null) {

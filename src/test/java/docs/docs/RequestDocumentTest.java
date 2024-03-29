@@ -2,6 +2,7 @@ package docs.docs;
 
 import static docs.BaseDocumentFields.list;
 import static docs.BaseDocumentFields.object;
+import static docs.BaseDocumentFields.page;
 import static docs.BaseDocumentFields.string;
 import static docs.docs.BaseDocument.document;
 
@@ -21,7 +22,9 @@ class RequestDocumentTest extends BaseControllerTest {
             .response(string("price").desc("가격"),
                 list("samples")
                     .desc("샘플")
-                    .with(string("orderName").desc("주문이름")))
+                    .with(string("orderName").desc("주문이름")),
+                page().with(string("sample").desc("샘플"))
+            )
             .end();
 
         given()

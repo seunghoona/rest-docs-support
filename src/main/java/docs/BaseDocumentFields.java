@@ -6,6 +6,7 @@ import docs.builder.FieldCollection;
 import docs.builder.FieldDefault;
 import docs.builder.FieldEnum;
 import docs.builder.FieldObject;
+import docs.builder.FieldPage;
 import docs.builder.Fields;
 import docs.model.JsonDocumentFieldType;
 
@@ -100,6 +101,11 @@ public interface BaseDocumentFields {
 	static Fields type(String filedName, String desc, boolean isOptional) {
 		return new FieldEnum(new FieldDefault(filedName, JsonDocumentFieldType.ENUM, desc, isOptional));
 	}
+
+	static Fields page() {
+		return new FieldPage();
+	}
+
 
 
 }
