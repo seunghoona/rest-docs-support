@@ -4,6 +4,7 @@ import static docs.BaseDocumentFields.list;
 import static docs.BaseDocumentFields.object;
 import static docs.BaseDocumentFields.page;
 import static docs.BaseDocumentFields.string;
+import static docs.BaseDocumentFields.type;
 import static docs.docs.BaseDocument.document;
 
 import docs.BaseControllerTest;
@@ -23,7 +24,9 @@ class RequestDocumentTest extends BaseControllerTest {
                 list("samples")
                     .desc("샘플")
                     .with(string("orderName").desc("주문이름")),
-                page().with(string("sample").desc("샘플"))
+                page().with(string("sample").desc("샘플")
+                ,type("sampleType").desc("샘플"))
+
             )
             .end();
 

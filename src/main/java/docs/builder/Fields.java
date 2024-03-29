@@ -15,4 +15,13 @@ public interface Fields extends Field {
     List<Field> getFields();
 
     Field getRootField();
+
+    default void changeName(Field field,  String fieldName) {
+        field.changeName(fieldName);
+    }
+
+    @Override
+    default void changeName(String fieldName) {
+
+    }
 }

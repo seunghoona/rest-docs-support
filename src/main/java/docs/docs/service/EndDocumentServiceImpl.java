@@ -7,6 +7,7 @@ import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import docs.builder.DocumentBuilder.FieldDocumentType;
 import docs.builder.Field;
 import docs.builder.FieldDefault;
+import docs.builder.FieldEnum;
 import docs.builder.FieldUnrWrap;
 import docs.builder.Fields;
 import docs.config.DefaultResponse;
@@ -47,8 +48,7 @@ public class EndDocumentServiceImpl implements EndDocumentService {
             .stream()
             .collect(() -> new HashMap<FieldDocumentType, List<Field>>(), (e, entry) -> {
                 List<Field> list = new ArrayList<>();
-                entry
-                    .getValue()
+                entry.getValue()
                     .forEach(subField -> {
                         if (subField instanceof Fields castSubField) {
                             list.addAll(castSubField.getFields());
@@ -101,6 +101,12 @@ public class EndDocumentServiceImpl implements EndDocumentService {
                     final var responseFields = docFields
                         .getValue()
                         .stream()
+                        .flatMap(field-> {
+                            if (field instanceof FieldEnum ) {
+                                return Stream.concat(((FieldEnum) field).getFields().stream(), Stream.of(((FieldEnum) field).getRootField()));
+                            }
+                            return Stream.of(field);
+                        })
                         .map(responseField -> {
 
                             final var getField = responseField.toGetFiled();

@@ -8,7 +8,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 @EqualsAndHashCode(of = "fieldName")
 public class FieldDefault implements Field, FieldGetter {
 
-    private final String fieldName;
+    private String fieldName;
 
     private final JsonDocumentFieldType jsonDocumentFieldType;
 
@@ -34,6 +34,11 @@ public class FieldDefault implements Field, FieldGetter {
     @Override
     public FieldGetter toGetFiled() {
         return this;
+    }
+
+    @Override
+    public void changeName(String fieldName) {
+        this.fieldName = fieldName;
     }
 
     @Override

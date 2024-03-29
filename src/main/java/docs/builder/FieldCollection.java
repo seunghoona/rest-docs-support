@@ -35,17 +35,14 @@ public class FieldCollection implements Fields {
     public Fields with(Field... fields) {
         final var list = Arrays
             .stream(fields)
-            .map(field -> {
+            .peek(field -> {
                 final var rootField = this.field.toGetFiled();
                 final var rootName = rootField.getFieldName();
 
                 final var subField = field.toGetFiled();
                 final var subFieldName = subField.getFieldName();
+                changeName(field, String.format("%s[].%s", rootName, subFieldName));
 
-                return new FieldDefault(String.format("%s[].%s", rootName, subFieldName),
-                    subField.getJsonDocumentFieldType(),
-                    subField.getDesc(),
-                    subField.isOptional());
             })
             .toList();
 
