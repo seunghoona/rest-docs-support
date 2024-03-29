@@ -11,6 +11,11 @@ public class FieldUnrWrap implements Fields {
     }
 
     @Override
+    public void changeName(String fieldName) {
+        field.changeName(fieldName);
+    }
+
+    @Override
     public Fields desc(String desc) {
         return field.desc(desc);
     }

@@ -24,8 +24,11 @@ class RequestDocumentTest extends BaseControllerTest {
                 list("samples")
                     .desc("샘플")
                     .with(string("orderName").desc("주문이름")),
-                page().with(string("sample").desc("샘플")
-                ,type("sampleType").desc("샘플"))
+                page()
+                    .with(
+                        string("sample").desc("샘플")
+                        ,type("sampleType").desc("샘플")
+                    )
 
             )
             .end();

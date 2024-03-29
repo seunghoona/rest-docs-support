@@ -32,6 +32,13 @@ public class FieldCollection implements Fields {
     }
 
     @Override
+    public void changeName(String fieldName) {
+        this.field.changeName(fieldName);
+        this.fields
+            .forEach(field -> field.changeName(fieldName));
+    }
+
+    @Override
     public Fields with(Field... fields) {
         final var list = Arrays
             .stream(fields)

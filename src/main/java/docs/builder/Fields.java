@@ -20,8 +20,4 @@ public interface Fields extends Field {
         field.changeName(fieldName);
     }
 
-    @Override
-    default void changeName(String fieldName) {
-
-    }
 }

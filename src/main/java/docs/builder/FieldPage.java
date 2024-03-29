@@ -43,6 +43,13 @@ public class FieldPage implements Fields {
     }
 
     @Override
+    public void changeName(String fieldName) {
+        this.field.changeName(fieldName);
+        this.fields
+            .forEach(field -> field.changeName(fieldName));
+    }
+
+    @Override
     public FieldGetter toGetFiled() {
         return field.toGetFiled();
     }
@@ -59,7 +66,7 @@ public class FieldPage implements Fields {
                 final var subField = field.toGetFiled();
                 final var subFieldName = subField.getFieldName();
 
-                changeName(String.format("%s.%s", rootName, subFieldName));
+                changeName(field, String.format("%s.%s", rootName, subFieldName));
             })
             .toList();
 

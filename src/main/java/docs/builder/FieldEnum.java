@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class FieldEnum implements Fields {
 
@@ -36,6 +37,13 @@ public class FieldEnum implements Fields {
     }
 
     @Override
+    public void changeName(String fieldName) {
+        this.field.changeName(fieldName);
+        this.fields
+            .forEach(field -> field.changeName(String.format("%s.%s", fieldName,field.toGetFiled().getFieldName())));
+    }
+
+    @Override
     public Fields with(Field... fields) {
         final var list = Arrays
             .stream(fields)
@@ -60,10 +68,7 @@ public class FieldEnum implements Fields {
     }
 
     private FieldDefault createField(String subField, String desc) {
-        final var rootName = this.field
-            .toGetFiled()
-            .getFieldName();
-        return new FieldDefault(String.format("%s.%s", rootName, subField),
+        return new FieldDefault(subField,
                                 JsonDocumentFieldType.STRING,
                                 desc, false);
     }
